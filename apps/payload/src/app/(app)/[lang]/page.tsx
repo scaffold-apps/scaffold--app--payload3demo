@@ -1,7 +1,20 @@
+import { Trans } from '@lingui/macro'
+import { setI18n } from '@lingui/react/server'
 import { Button } from '@repo/ui/button'
 import Link from 'next/link'
+import React from 'react'
+import { allI18nInstances } from './appRouteri18n'
 
-const Page = () => {
+type Props = {
+  params: {
+    lang: string
+  }
+}
+
+export default function Page({ params }: Props) {
+  const i18n = allI18nInstances[params.lang] // get a ready-made i18n instance for the given locale
+  setI18n(i18n) // make it available server-side for the current request
+
   return (
     <>
       <main className="text-center flex space-y-4 flex-col items-center">
@@ -25,11 +38,11 @@ const Page = () => {
           <p>You can use the Local API in your server components like this:</p>
         </article>
         <div className="flex flex-col items-center justify-center w-full">
-          <Button>Here is a Shadcn button</Button>
+          <Button>
+            <Trans>Here is a Shadcn button</Trans>
+          </Button>
         </div>
       </main>
     </>
   )
 }
-
-export default Page
