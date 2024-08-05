@@ -1,14 +1,11 @@
-import { Badge } from '@/components/Badge'
-import { Background } from '@/components/Background'
+import { Button } from '@repo/ui/button'
 import Link from 'next/link'
-import React from 'react'
 
 const Page = () => {
   return (
     <>
-      <main>
-        <article>
-          <Badge />
+      <main className="text-center flex space-y-4 flex-col items-center">
+        <article className="lg:max-w-screen-lg">
           <h1>Payload 3.0</h1>
           <p>
             This BETA is rapidly evolving, you can report any bugs against{' '}
@@ -27,24 +24,10 @@ const Page = () => {
           </p>
           <p>You can use the Local API in your server components like this:</p>
         </article>
-        <div className="codeBlock">
-          <pre>
-            <code>
-              {`import { getPayloadHMR } from '@payloadcms/next/utilities'
-import configPromise from '@payload-config'
-const payload = await getPayloadHMR({ config: configPromise })
-
-const data = await payload.find({
-  collection: 'posts',
-})
-
-return <Posts data={data} />
-`}
-            </code>
-          </pre>
+        <div className="flex flex-col items-center justify-center w-full">
+          <Button>Here is a Shadcn button</Button>
         </div>
       </main>
-      <Background />
     </>
   )
 }

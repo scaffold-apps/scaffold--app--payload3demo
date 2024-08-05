@@ -1,6 +1,7 @@
-import React from 'react'
-import './globals.scss'
 import { Inter } from 'next/font/google'
+import React from 'react'
+import '../../../tailwind.css'
+import './globals.scss'
 
 const inter = Inter({
   subsets: ['latin'],
