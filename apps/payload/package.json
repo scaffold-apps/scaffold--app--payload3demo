@@ -14,6 +14,7 @@
     "ci": "payload migrate && pnpm build",
     "generate:types": "payload generate:types",
     "generate:schema": "payload-graphql generate:schema",
+    "g:types": "npm run generate:types && npm run generate:schema",
     "standalone-script": "node ./src/scripts/standalone-script.js",
     "lang:extract": "lingui extract",
     "lang:compile": "lingui compile",

@@ -12,6 +12,11 @@ const { locales } = linguiConfig
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Don't add locale to API routes
+  if (pathname.startsWith('/api/') || pathname.startsWith('/admin')) {
+    return NextResponse.next()
+  }
+
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   )
