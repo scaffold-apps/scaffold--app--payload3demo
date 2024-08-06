@@ -1,4 +1,5 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
+// import { postgresAdapter } from '@payloadcms/db-postgres'
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { en } from 'payload/i18n/en'
@@ -20,15 +21,16 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+
   // db: postgresAdapter({
   //   pool: {
-  //     connectionString: process.env.POSTGRES_URI || ''
-  //   }
+  //     connectionString: process.env.POSTGRES_URI || '',
+  //   },
   // }),
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.POSTGRES_URI || '',
-    },
+  db: mongooseAdapter({
+    // Mongoose-specific arguments go here.
+    // URL is required.
+    url: process.env.MONGODB_URI || '',
   }),
 
   /**
@@ -49,13 +51,13 @@ export default buildConfig({
   },
   async onInit(payload) {
     const existingUsers = await payload.find({
-      collection: 'users',
+      collection: adminCollection.slug,
       limit: 1,
     })
 
     if (existingUsers.docs.length === 0) {
       await payload.create({
-        collection: 'users',
+        collection: adminCollection.slug,
         data: {
           email: 'dev@payloadcms.com',
           password: 'test',
