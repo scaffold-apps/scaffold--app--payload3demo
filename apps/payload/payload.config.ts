@@ -5,6 +5,7 @@ import path from 'path'
 import { en } from 'payload/i18n/en'
 //import { slateEditor } from '@payloadcms/richtext-slate'
 import { adminCollection } from '@repo/collections/admins'
+import { Theme } from '@repo/collections/globals'
 import { pagesCollection } from '@repo/collections/pages'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
@@ -49,6 +50,9 @@ export default buildConfig({
       prefillOnly: true,
     },
   },
+
+  globals: [Theme],
+
   async onInit(payload) {
     const existingUsers = await payload.find({
       collection: adminCollection.slug,

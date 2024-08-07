@@ -1,23 +1,23 @@
 type Query {
-  Admin(id: Int!, draft: Boolean): Admin
+  Admin(id: String!, draft: Boolean): Admin
   Admins(draft: Boolean, where: Admin_where, limit: Int, page: Int, sort: String): Admins
   countAdmins(draft: Boolean, where: Admin_where): countAdmins
-  docAccessAdmin(id: Int!): adminsDocAccess
+  docAccessAdmin(id: String!): adminsDocAccess
   meAdmin: adminsMe
   initializedAdmin: Boolean
-  Page(id: Int!, draft: Boolean): Page
+  Page(id: String!, draft: Boolean): Page
   Pages(draft: Boolean, where: Page_where, limit: Int, page: Int, sort: String): Pages
   countPages(draft: Boolean, where: Page_where): countPages
-  docAccessPage(id: Int!): pagesDocAccess
-  PayloadPreference(id: Int!, draft: Boolean): PayloadPreference
+  docAccessPage(id: String!): pagesDocAccess
+  PayloadPreference(id: String!, draft: Boolean): PayloadPreference
   PayloadPreferences(draft: Boolean, where: PayloadPreference_where, limit: Int, page: Int, sort: String): PayloadPreferences
   countPayloadPreferences(draft: Boolean, where: PayloadPreference_where): countPayloadPreferences
-  docAccessPayloadPreference(id: Int!): payload_preferencesDocAccess
+  docAccessPayloadPreference(id: String!): payload_preferencesDocAccess
   Access: Access
 }
 
 type Admin {
-  id: Int
+  id: String
   updatedAt: DateTime
   createdAt: DateTime
   email: EmailAddress!
@@ -96,12 +96,13 @@ input Admin_email_operator {
 }
 
 input Admin_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -274,7 +275,7 @@ type adminsMe {
 }
 
 type Page {
-  id: Int
+  id: String
   title: String!
   publishedDate: DateTime
   layout: [Page_Layout!]!
@@ -414,12 +415,13 @@ input Page_createdAt_operator {
 }
 
 input Page_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -625,7 +627,7 @@ type PagesDeleteDocAccess {
 }
 
 type PayloadPreference {
-  id: Int
+  id: String
   user: PayloadPreference_User_Relationship!
   key: String
   value: JSON
@@ -727,12 +729,13 @@ input PayloadPreference_createdAt_operator {
 }
 
 input PayloadPreference_id_operator {
-  equals: Int
-  not_equals: Int
-  greater_than_equal: Int
-  greater_than: Int
-  less_than_equal: Int
-  less_than: Int
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -1381,8 +1384,8 @@ type PayloadPreferencesDeleteAccess {
 
 type Mutation {
   createAdmin(data: mutationAdminInput!, draft: Boolean): Admin
-  updateAdmin(id: Int!, autosave: Boolean, data: mutationAdminUpdateInput!, draft: Boolean): Admin
-  deleteAdmin(id: Int!): Admin
+  updateAdmin(id: String!, autosave: Boolean, data: mutationAdminUpdateInput!, draft: Boolean): Admin
+  deleteAdmin(id: String!): Admin
   refreshTokenAdmin: adminsRefreshedAdmin
   logoutAdmin: String
   unlockAdmin(email: String!): Boolean!
@@ -1391,13 +1394,13 @@ type Mutation {
   resetPasswordAdmin(password: String, token: String): adminsResetPassword
   verifyEmailAdmin(token: String): Boolean
   createPage(data: mutationPageInput!, draft: Boolean): Page
-  updatePage(id: Int!, autosave: Boolean, data: mutationPageUpdateInput!, draft: Boolean): Page
-  deletePage(id: Int!): Page
-  duplicatePage(id: Int!): Page
+  updatePage(id: String!, autosave: Boolean, data: mutationPageUpdateInput!, draft: Boolean): Page
+  deletePage(id: String!): Page
+  duplicatePage(id: String!): Page
   createPayloadPreference(data: mutationPayloadPreferenceInput!, draft: Boolean): PayloadPreference
-  updatePayloadPreference(id: Int!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean): PayloadPreference
-  deletePayloadPreference(id: Int!): PayloadPreference
-  duplicatePayloadPreference(id: Int!): PayloadPreference
+  updatePayloadPreference(id: String!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean): PayloadPreference
+  deletePayloadPreference(id: String!): PayloadPreference
+  duplicatePayloadPreference(id: String!): PayloadPreference
 }
 
 input mutationAdminInput {

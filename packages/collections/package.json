@@ -5,7 +5,8 @@
     "exports": {
         "./admins": "./src/admins.ts",
         "./customers": "./src/customers.ts",
-        "./pages": "./src/pages.ts"
+        "./pages": "./src/pages.ts",
+        "./globals": "./src/globals/index.ts"
     },
     "scripts": {
         "lint": "eslint . --max-warnings 0",
