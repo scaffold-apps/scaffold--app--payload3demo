@@ -13,6 +13,7 @@ export interface Config {
   collections: {
     admins: Admin;
     pages: Page;
+    media: Media;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -62,6 +63,27 @@ export interface Page {
   id: string;
   title: string;
   publishedDate?: string | null;
+  header?: {
+    showHeader?: boolean | null;
+    companyName?: string | null;
+    logo?: (string | null) | Media;
+    navItems?:
+      | {
+          link: {
+            type?: ('reference' | 'custom' | 'contactus' | 'mediamodal') | null;
+            newTab?: boolean | null;
+            reference?: {
+              relationTo: 'pages';
+              value: string | Page;
+            } | null;
+            media?: string | null;
+            url?: string | null;
+            label: string;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
   layout: {
     invertBackground?: boolean | null;
     title?: string | null;
@@ -91,6 +113,26 @@ export interface Page {
   slug?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  prefix?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

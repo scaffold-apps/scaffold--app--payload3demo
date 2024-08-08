@@ -1,0 +1,12 @@
+.cta {
+  box-shadow: 0 6px rgba(94, 30, 146);
+  transform: translateY(0);
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+
+.cta:active {
+  box-shadow: 0 3px rgba(94, 30, 146);
+  transform: translateY(3px);
+}

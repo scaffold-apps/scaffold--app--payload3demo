@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "exports": {
+        "./media": "./src/media.ts",
         "./admins": "./src/admins.ts",
         "./customers": "./src/customers.ts",
         "./pages": "./src/pages.ts",

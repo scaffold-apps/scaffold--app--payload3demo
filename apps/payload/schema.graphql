@@ -9,10 +9,16 @@ type Query {
   Pages(draft: Boolean, where: Page_where, limit: Int, page: Int, sort: String): Pages
   countPages(draft: Boolean, where: Page_where): countPages
   docAccessPage(id: String!): pagesDocAccess
+  Media(id: String!, draft: Boolean): Media
+  allMedia(draft: Boolean, where: Media_where, limit: Int, page: Int, sort: String): allMedia
+  countallMedia(draft: Boolean, where: Media_where): countallMedia
+  docAccessMedia(id: String!): mediaDocAccess
   PayloadPreference(id: String!, draft: Boolean): PayloadPreference
   PayloadPreferences(draft: Boolean, where: PayloadPreference_where, limit: Int, page: Int, sort: String): PayloadPreferences
   countPayloadPreferences(draft: Boolean, where: PayloadPreference_where): countPayloadPreferences
   docAccessPayloadPreference(id: String!): payload_preferencesDocAccess
+  Theme(draft: Boolean): Theme
+  docAccessTheme: themeDocAccess
   Access: Access
 }
 
@@ -278,11 +284,68 @@ type Page {
   id: String
   title: String!
   publishedDate: DateTime
+  header: Page_Header
   layout: [Page_Layout!]!
   slug: String
   updatedAt: DateTime
   createdAt: DateTime
 }
+
+type Page_Header {
+  showHeader: Boolean
+  companyName: String
+  logo: Media
+  navItems: [Page_Header_NavItems!]
+}
+
+type Media {
+  id: String
+  alt: String!
+  prefix: String
+  updatedAt: DateTime
+  createdAt: DateTime
+  url: String
+  thumbnailURL: String
+  filename: String
+  mimeType: String
+  filesize: Float
+  width: Float
+  height: Float
+  focalX: Float
+  focalY: Float
+}
+
+type Page_Header_NavItems {
+  link: Page_Header_NavItems_Link
+  id: String
+}
+
+type Page_Header_NavItems_Link {
+  type: Page_Header_NavItems_Link_type
+  newTab: Boolean
+  reference: Page_Header_NavItems_Link_Reference_Relationship
+  media: String
+  url: String
+  label: String
+}
+
+enum Page_Header_NavItems_Link_type {
+  reference
+  custom
+  contactus
+  mediamodal
+}
+
+type Page_Header_NavItems_Link_Reference_Relationship {
+  relationTo: Page_Header_NavItems_Link_Reference_RelationTo
+  value: Page_Header_NavItems_Link_Reference
+}
+
+enum Page_Header_NavItems_Link_Reference_RelationTo {
+  pages
+}
+
+union Page_Header_NavItems_Link_Reference = Page
 
 union Page_Layout = HeroBlock
 
@@ -352,6 +415,16 @@ type Pages {
 input Page_where {
   title: Page_title_operator
   publishedDate: Page_publishedDate_operator
+  header__showHeader: Page_header__showHeader_operator
+  header__companyName: Page_header__companyName_operator
+  header__logo: Page_header__logo_operator
+  header__navItems__link__type: Page_header__navItems__link__type_operator
+  header__navItems__link__newTab: Page_header__navItems__link__newTab_operator
+  header__navItems__link__reference: Page_header__navItems__link__reference_Relation
+  header__navItems__link__media: Page_header__navItems__link__media_operator
+  header__navItems__link__url: Page_header__navItems__link__url_operator
+  header__navItems__link__label: Page_header__navItems__link__label_operator
+  header__navItems__id: Page_header__navItems__id_operator
   slug: Page_slug_operator
   updatedAt: Page_updatedAt_operator
   createdAt: Page_createdAt_operator
@@ -378,6 +451,108 @@ input Page_publishedDate_operator {
   less_than_equal: DateTime
   less_than: DateTime
   like: DateTime
+  exists: Boolean
+}
+
+input Page_header__showHeader_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Page_header__companyName_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Page_header__logo_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+input Page_header__navItems__link__type_operator {
+  equals: Page_header__navItems__link__type_Input
+  not_equals: Page_header__navItems__link__type_Input
+  like: Page_header__navItems__link__type_Input
+  contains: Page_header__navItems__link__type_Input
+  exists: Boolean
+}
+
+enum Page_header__navItems__link__type_Input {
+  reference
+  custom
+  contactus
+  mediamodal
+}
+
+input Page_header__navItems__link__newTab_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Page_header__navItems__link__reference_Relation {
+  relationTo: Page_header__navItems__link__reference_Relation_RelationTo
+  value: JSON
+}
+
+enum Page_header__navItems__link__reference_Relation_RelationTo {
+  pages
+}
+
+input Page_header__navItems__link__media_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Page_header__navItems__link__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Page_header__navItems__link__label_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Page_header__navItems__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -428,6 +603,16 @@ input Page_id_operator {
 input Page_where_and {
   title: Page_title_operator
   publishedDate: Page_publishedDate_operator
+  header__showHeader: Page_header__showHeader_operator
+  header__companyName: Page_header__companyName_operator
+  header__logo: Page_header__logo_operator
+  header__navItems__link__type: Page_header__navItems__link__type_operator
+  header__navItems__link__newTab: Page_header__navItems__link__newTab_operator
+  header__navItems__link__reference: Page_header__navItems__link__reference_Relation
+  header__navItems__link__media: Page_header__navItems__link__media_operator
+  header__navItems__link__url: Page_header__navItems__link__url_operator
+  header__navItems__link__label: Page_header__navItems__link__label_operator
+  header__navItems__id: Page_header__navItems__id_operator
   slug: Page_slug_operator
   updatedAt: Page_updatedAt_operator
   createdAt: Page_createdAt_operator
@@ -439,6 +624,16 @@ input Page_where_and {
 input Page_where_or {
   title: Page_title_operator
   publishedDate: Page_publishedDate_operator
+  header__showHeader: Page_header__showHeader_operator
+  header__companyName: Page_header__companyName_operator
+  header__logo: Page_header__logo_operator
+  header__navItems__link__type: Page_header__navItems__link__type_operator
+  header__navItems__link__newTab: Page_header__navItems__link__newTab_operator
+  header__navItems__link__reference: Page_header__navItems__link__reference_Relation
+  header__navItems__link__media: Page_header__navItems__link__media_operator
+  header__navItems__link__url: Page_header__navItems__link__url_operator
+  header__navItems__link__label: Page_header__navItems__link__label_operator
+  header__navItems__id: Page_header__navItems__id_operator
   slug: Page_slug_operator
   updatedAt: Page_updatedAt_operator
   createdAt: Page_createdAt_operator
@@ -462,6 +657,7 @@ type pagesDocAccess {
 type PagesDocAccessFields {
   title: PagesDocAccessFields_title
   publishedDate: PagesDocAccessFields_publishedDate
+  header: PagesDocAccessFields_header
   layout: PagesDocAccessFields_layout
   slug: PagesDocAccessFields_slug
   updatedAt: PagesDocAccessFields_updatedAt
@@ -511,6 +707,329 @@ type PagesDocAccessFields_publishedDate_Update {
 }
 
 type PagesDocAccessFields_publishedDate_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header {
+  create: PagesDocAccessFields_header_Create
+  read: PagesDocAccessFields_header_Read
+  update: PagesDocAccessFields_header_Update
+  delete: PagesDocAccessFields_header_Delete
+  fields: PagesDocAccessFields_header_Fields
+}
+
+type PagesDocAccessFields_header_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_Fields {
+  showHeader: PagesDocAccessFields_header_showHeader
+  companyName: PagesDocAccessFields_header_companyName
+  logo: PagesDocAccessFields_header_logo
+  navItems: PagesDocAccessFields_header_navItems
+}
+
+type PagesDocAccessFields_header_showHeader {
+  create: PagesDocAccessFields_header_showHeader_Create
+  read: PagesDocAccessFields_header_showHeader_Read
+  update: PagesDocAccessFields_header_showHeader_Update
+  delete: PagesDocAccessFields_header_showHeader_Delete
+}
+
+type PagesDocAccessFields_header_showHeader_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_showHeader_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_showHeader_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_showHeader_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_companyName {
+  create: PagesDocAccessFields_header_companyName_Create
+  read: PagesDocAccessFields_header_companyName_Read
+  update: PagesDocAccessFields_header_companyName_Update
+  delete: PagesDocAccessFields_header_companyName_Delete
+}
+
+type PagesDocAccessFields_header_companyName_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_companyName_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_companyName_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_companyName_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_logo {
+  create: PagesDocAccessFields_header_logo_Create
+  read: PagesDocAccessFields_header_logo_Read
+  update: PagesDocAccessFields_header_logo_Update
+  delete: PagesDocAccessFields_header_logo_Delete
+}
+
+type PagesDocAccessFields_header_logo_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_logo_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_logo_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_logo_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems {
+  create: PagesDocAccessFields_header_navItems_Create
+  read: PagesDocAccessFields_header_navItems_Read
+  update: PagesDocAccessFields_header_navItems_Update
+  delete: PagesDocAccessFields_header_navItems_Delete
+  fields: PagesDocAccessFields_header_navItems_Fields
+}
+
+type PagesDocAccessFields_header_navItems_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_Fields {
+  link: PagesDocAccessFields_header_navItems_link
+  id: PagesDocAccessFields_header_navItems_id
+}
+
+type PagesDocAccessFields_header_navItems_link {
+  create: PagesDocAccessFields_header_navItems_link_Create
+  read: PagesDocAccessFields_header_navItems_link_Read
+  update: PagesDocAccessFields_header_navItems_link_Update
+  delete: PagesDocAccessFields_header_navItems_link_Delete
+  fields: PagesDocAccessFields_header_navItems_link_Fields
+}
+
+type PagesDocAccessFields_header_navItems_link_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_Fields {
+  type: PagesDocAccessFields_header_navItems_link_type
+  newTab: PagesDocAccessFields_header_navItems_link_newTab
+  reference: PagesDocAccessFields_header_navItems_link_reference
+  media: PagesDocAccessFields_header_navItems_link_media
+  url: PagesDocAccessFields_header_navItems_link_url
+  label: PagesDocAccessFields_header_navItems_link_label
+}
+
+type PagesDocAccessFields_header_navItems_link_type {
+  create: PagesDocAccessFields_header_navItems_link_type_Create
+  read: PagesDocAccessFields_header_navItems_link_type_Read
+  update: PagesDocAccessFields_header_navItems_link_type_Update
+  delete: PagesDocAccessFields_header_navItems_link_type_Delete
+}
+
+type PagesDocAccessFields_header_navItems_link_type_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_type_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_type_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_type_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_newTab {
+  create: PagesDocAccessFields_header_navItems_link_newTab_Create
+  read: PagesDocAccessFields_header_navItems_link_newTab_Read
+  update: PagesDocAccessFields_header_navItems_link_newTab_Update
+  delete: PagesDocAccessFields_header_navItems_link_newTab_Delete
+}
+
+type PagesDocAccessFields_header_navItems_link_newTab_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_newTab_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_newTab_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_newTab_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_reference {
+  create: PagesDocAccessFields_header_navItems_link_reference_Create
+  read: PagesDocAccessFields_header_navItems_link_reference_Read
+  update: PagesDocAccessFields_header_navItems_link_reference_Update
+  delete: PagesDocAccessFields_header_navItems_link_reference_Delete
+}
+
+type PagesDocAccessFields_header_navItems_link_reference_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_reference_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_reference_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_reference_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_media {
+  create: PagesDocAccessFields_header_navItems_link_media_Create
+  read: PagesDocAccessFields_header_navItems_link_media_Read
+  update: PagesDocAccessFields_header_navItems_link_media_Update
+  delete: PagesDocAccessFields_header_navItems_link_media_Delete
+}
+
+type PagesDocAccessFields_header_navItems_link_media_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_media_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_media_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_media_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_url {
+  create: PagesDocAccessFields_header_navItems_link_url_Create
+  read: PagesDocAccessFields_header_navItems_link_url_Read
+  update: PagesDocAccessFields_header_navItems_link_url_Update
+  delete: PagesDocAccessFields_header_navItems_link_url_Delete
+}
+
+type PagesDocAccessFields_header_navItems_link_url_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_url_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_url_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_url_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_label {
+  create: PagesDocAccessFields_header_navItems_link_label_Create
+  read: PagesDocAccessFields_header_navItems_link_label_Read
+  update: PagesDocAccessFields_header_navItems_link_label_Update
+  delete: PagesDocAccessFields_header_navItems_link_label_Delete
+}
+
+type PagesDocAccessFields_header_navItems_link_label_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_label_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_label_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_link_label_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_id {
+  create: PagesDocAccessFields_header_navItems_id_Create
+  read: PagesDocAccessFields_header_navItems_id_Read
+  update: PagesDocAccessFields_header_navItems_id_Update
+  delete: PagesDocAccessFields_header_navItems_id_Delete
+}
+
+type PagesDocAccessFields_header_navItems_id_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_id_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_id_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_id_Delete {
   permission: Boolean!
 }
 
@@ -626,6 +1145,572 @@ type PagesDeleteDocAccess {
   where: JSONObject
 }
 
+type allMedia {
+  docs: [Media]
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  offset: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+input Media_where {
+  alt: Media_alt_operator
+  prefix: Media_prefix_operator
+  updatedAt: Media_updatedAt_operator
+  createdAt: Media_createdAt_operator
+  url: Media_url_operator
+  thumbnailURL: Media_thumbnailURL_operator
+  filename: Media_filename_operator
+  mimeType: Media_mimeType_operator
+  filesize: Media_filesize_operator
+  width: Media_width_operator
+  height: Media_height_operator
+  focalX: Media_focalX_operator
+  focalY: Media_focalY_operator
+  id: Media_id_operator
+  AND: [Media_where_and]
+  OR: [Media_where_or]
+}
+
+input Media_alt_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input Media_prefix_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_thumbnailURL_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_where_and {
+  alt: Media_alt_operator
+  prefix: Media_prefix_operator
+  updatedAt: Media_updatedAt_operator
+  createdAt: Media_createdAt_operator
+  url: Media_url_operator
+  thumbnailURL: Media_thumbnailURL_operator
+  filename: Media_filename_operator
+  mimeType: Media_mimeType_operator
+  filesize: Media_filesize_operator
+  width: Media_width_operator
+  height: Media_height_operator
+  focalX: Media_focalX_operator
+  focalY: Media_focalY_operator
+  id: Media_id_operator
+  AND: [Media_where_and]
+  OR: [Media_where_or]
+}
+
+input Media_where_or {
+  alt: Media_alt_operator
+  prefix: Media_prefix_operator
+  updatedAt: Media_updatedAt_operator
+  createdAt: Media_createdAt_operator
+  url: Media_url_operator
+  thumbnailURL: Media_thumbnailURL_operator
+  filename: Media_filename_operator
+  mimeType: Media_mimeType_operator
+  filesize: Media_filesize_operator
+  width: Media_width_operator
+  height: Media_height_operator
+  focalX: Media_focalX_operator
+  focalY: Media_focalY_operator
+  id: Media_id_operator
+  AND: [Media_where_and]
+  OR: [Media_where_or]
+}
+
+type countallMedia {
+  totalDocs: Int
+}
+
+type mediaDocAccess {
+  fields: MediaDocAccessFields
+  create: MediaCreateDocAccess
+  read: MediaReadDocAccess
+  update: MediaUpdateDocAccess
+  delete: MediaDeleteDocAccess
+}
+
+type MediaDocAccessFields {
+  alt: MediaDocAccessFields_alt
+  prefix: MediaDocAccessFields_prefix
+  updatedAt: MediaDocAccessFields_updatedAt
+  createdAt: MediaDocAccessFields_createdAt
+  url: MediaDocAccessFields_url
+  thumbnailURL: MediaDocAccessFields_thumbnailURL
+  filename: MediaDocAccessFields_filename
+  mimeType: MediaDocAccessFields_mimeType
+  filesize: MediaDocAccessFields_filesize
+  width: MediaDocAccessFields_width
+  height: MediaDocAccessFields_height
+  focalX: MediaDocAccessFields_focalX
+  focalY: MediaDocAccessFields_focalY
+}
+
+type MediaDocAccessFields_alt {
+  create: MediaDocAccessFields_alt_Create
+  read: MediaDocAccessFields_alt_Read
+  update: MediaDocAccessFields_alt_Update
+  delete: MediaDocAccessFields_alt_Delete
+}
+
+type MediaDocAccessFields_alt_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_alt_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_alt_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_alt_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_prefix {
+  create: MediaDocAccessFields_prefix_Create
+  read: MediaDocAccessFields_prefix_Read
+  update: MediaDocAccessFields_prefix_Update
+  delete: MediaDocAccessFields_prefix_Delete
+}
+
+type MediaDocAccessFields_prefix_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_prefix_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_prefix_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_prefix_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_updatedAt {
+  create: MediaDocAccessFields_updatedAt_Create
+  read: MediaDocAccessFields_updatedAt_Read
+  update: MediaDocAccessFields_updatedAt_Update
+  delete: MediaDocAccessFields_updatedAt_Delete
+}
+
+type MediaDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt {
+  create: MediaDocAccessFields_createdAt_Create
+  read: MediaDocAccessFields_createdAt_Read
+  update: MediaDocAccessFields_createdAt_Update
+  delete: MediaDocAccessFields_createdAt_Delete
+}
+
+type MediaDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_url {
+  create: MediaDocAccessFields_url_Create
+  read: MediaDocAccessFields_url_Read
+  update: MediaDocAccessFields_url_Update
+  delete: MediaDocAccessFields_url_Delete
+}
+
+type MediaDocAccessFields_url_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_url_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_url_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_url_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_thumbnailURL {
+  create: MediaDocAccessFields_thumbnailURL_Create
+  read: MediaDocAccessFields_thumbnailURL_Read
+  update: MediaDocAccessFields_thumbnailURL_Update
+  delete: MediaDocAccessFields_thumbnailURL_Delete
+}
+
+type MediaDocAccessFields_thumbnailURL_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_thumbnailURL_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_thumbnailURL_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_thumbnailURL_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filename {
+  create: MediaDocAccessFields_filename_Create
+  read: MediaDocAccessFields_filename_Read
+  update: MediaDocAccessFields_filename_Update
+  delete: MediaDocAccessFields_filename_Delete
+}
+
+type MediaDocAccessFields_filename_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filename_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filename_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filename_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mimeType {
+  create: MediaDocAccessFields_mimeType_Create
+  read: MediaDocAccessFields_mimeType_Read
+  update: MediaDocAccessFields_mimeType_Update
+  delete: MediaDocAccessFields_mimeType_Delete
+}
+
+type MediaDocAccessFields_mimeType_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mimeType_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mimeType_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mimeType_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filesize {
+  create: MediaDocAccessFields_filesize_Create
+  read: MediaDocAccessFields_filesize_Read
+  update: MediaDocAccessFields_filesize_Update
+  delete: MediaDocAccessFields_filesize_Delete
+}
+
+type MediaDocAccessFields_filesize_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filesize_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filesize_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_filesize_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_width {
+  create: MediaDocAccessFields_width_Create
+  read: MediaDocAccessFields_width_Read
+  update: MediaDocAccessFields_width_Update
+  delete: MediaDocAccessFields_width_Delete
+}
+
+type MediaDocAccessFields_width_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_width_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_width_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_width_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_height {
+  create: MediaDocAccessFields_height_Create
+  read: MediaDocAccessFields_height_Read
+  update: MediaDocAccessFields_height_Update
+  delete: MediaDocAccessFields_height_Delete
+}
+
+type MediaDocAccessFields_height_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_height_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_height_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_height_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalX {
+  create: MediaDocAccessFields_focalX_Create
+  read: MediaDocAccessFields_focalX_Read
+  update: MediaDocAccessFields_focalX_Update
+  delete: MediaDocAccessFields_focalX_Delete
+}
+
+type MediaDocAccessFields_focalX_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalX_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalX_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalX_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY {
+  create: MediaDocAccessFields_focalY_Create
+  read: MediaDocAccessFields_focalY_Read
+  update: MediaDocAccessFields_focalY_Update
+  delete: MediaDocAccessFields_focalY_Delete
+}
+
+type MediaDocAccessFields_focalY_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_focalY_Delete {
+  permission: Boolean!
+}
+
+type MediaCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MediaReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MediaUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MediaDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type PayloadPreference {
   id: String
   user: PayloadPreference_User_Relationship!
@@ -645,11 +1730,6 @@ enum PayloadPreference_User_RelationTo {
 }
 
 union PayloadPreference_User = Admin
-
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type PayloadPreferences {
   docs: [PayloadPreference]
@@ -916,11 +1996,115 @@ type PayloadPreferencesDeleteDocAccess {
   where: JSONObject
 }
 
+type Theme {
+  theme: Theme_theme
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+enum Theme_theme {
+  light
+  dark
+}
+
+type themeDocAccess {
+  fields: ThemeDocAccessFields
+  read: ThemeReadDocAccess
+  update: ThemeUpdateDocAccess
+}
+
+type ThemeDocAccessFields {
+  theme: ThemeDocAccessFields_theme
+  updatedAt: ThemeDocAccessFields_updatedAt
+  createdAt: ThemeDocAccessFields_createdAt
+}
+
+type ThemeDocAccessFields_theme {
+  create: ThemeDocAccessFields_theme_Create
+  read: ThemeDocAccessFields_theme_Read
+  update: ThemeDocAccessFields_theme_Update
+  delete: ThemeDocAccessFields_theme_Delete
+}
+
+type ThemeDocAccessFields_theme_Create {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_theme_Read {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_theme_Update {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_theme_Delete {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_updatedAt {
+  create: ThemeDocAccessFields_updatedAt_Create
+  read: ThemeDocAccessFields_updatedAt_Read
+  update: ThemeDocAccessFields_updatedAt_Update
+  delete: ThemeDocAccessFields_updatedAt_Delete
+}
+
+type ThemeDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_createdAt {
+  create: ThemeDocAccessFields_createdAt_Create
+  read: ThemeDocAccessFields_createdAt_Read
+  update: ThemeDocAccessFields_createdAt_Update
+  delete: ThemeDocAccessFields_createdAt_Delete
+}
+
+type ThemeDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type ThemeDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type ThemeReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type ThemeUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type Access {
   canAccessAdmin: Boolean!
   admins: adminsAccess
   pages: pagesAccess
+  media: mediaAccess
   payload_preferences: payload_preferencesAccess
+  theme: themeAccess
 }
 
 type adminsAccess {
@@ -1067,6 +2251,7 @@ type pagesAccess {
 type PagesFields {
   title: PagesFields_title
   publishedDate: PagesFields_publishedDate
+  header: PagesFields_header
   layout: PagesFields_layout
   slug: PagesFields_slug
   updatedAt: PagesFields_updatedAt
@@ -1116,6 +2301,329 @@ type PagesFields_publishedDate_Update {
 }
 
 type PagesFields_publishedDate_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header {
+  create: PagesFields_header_Create
+  read: PagesFields_header_Read
+  update: PagesFields_header_Update
+  delete: PagesFields_header_Delete
+  fields: PagesFields_header_Fields
+}
+
+type PagesFields_header_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_Fields {
+  showHeader: PagesFields_header_showHeader
+  companyName: PagesFields_header_companyName
+  logo: PagesFields_header_logo
+  navItems: PagesFields_header_navItems
+}
+
+type PagesFields_header_showHeader {
+  create: PagesFields_header_showHeader_Create
+  read: PagesFields_header_showHeader_Read
+  update: PagesFields_header_showHeader_Update
+  delete: PagesFields_header_showHeader_Delete
+}
+
+type PagesFields_header_showHeader_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_showHeader_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_showHeader_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_showHeader_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_companyName {
+  create: PagesFields_header_companyName_Create
+  read: PagesFields_header_companyName_Read
+  update: PagesFields_header_companyName_Update
+  delete: PagesFields_header_companyName_Delete
+}
+
+type PagesFields_header_companyName_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_companyName_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_companyName_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_companyName_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_logo {
+  create: PagesFields_header_logo_Create
+  read: PagesFields_header_logo_Read
+  update: PagesFields_header_logo_Update
+  delete: PagesFields_header_logo_Delete
+}
+
+type PagesFields_header_logo_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_logo_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_logo_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_logo_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems {
+  create: PagesFields_header_navItems_Create
+  read: PagesFields_header_navItems_Read
+  update: PagesFields_header_navItems_Update
+  delete: PagesFields_header_navItems_Delete
+  fields: PagesFields_header_navItems_Fields
+}
+
+type PagesFields_header_navItems_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_Fields {
+  link: PagesFields_header_navItems_link
+  id: PagesFields_header_navItems_id
+}
+
+type PagesFields_header_navItems_link {
+  create: PagesFields_header_navItems_link_Create
+  read: PagesFields_header_navItems_link_Read
+  update: PagesFields_header_navItems_link_Update
+  delete: PagesFields_header_navItems_link_Delete
+  fields: PagesFields_header_navItems_link_Fields
+}
+
+type PagesFields_header_navItems_link_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_Fields {
+  type: PagesFields_header_navItems_link_type
+  newTab: PagesFields_header_navItems_link_newTab
+  reference: PagesFields_header_navItems_link_reference
+  media: PagesFields_header_navItems_link_media
+  url: PagesFields_header_navItems_link_url
+  label: PagesFields_header_navItems_link_label
+}
+
+type PagesFields_header_navItems_link_type {
+  create: PagesFields_header_navItems_link_type_Create
+  read: PagesFields_header_navItems_link_type_Read
+  update: PagesFields_header_navItems_link_type_Update
+  delete: PagesFields_header_navItems_link_type_Delete
+}
+
+type PagesFields_header_navItems_link_type_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_type_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_type_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_type_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_newTab {
+  create: PagesFields_header_navItems_link_newTab_Create
+  read: PagesFields_header_navItems_link_newTab_Read
+  update: PagesFields_header_navItems_link_newTab_Update
+  delete: PagesFields_header_navItems_link_newTab_Delete
+}
+
+type PagesFields_header_navItems_link_newTab_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_newTab_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_newTab_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_newTab_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_reference {
+  create: PagesFields_header_navItems_link_reference_Create
+  read: PagesFields_header_navItems_link_reference_Read
+  update: PagesFields_header_navItems_link_reference_Update
+  delete: PagesFields_header_navItems_link_reference_Delete
+}
+
+type PagesFields_header_navItems_link_reference_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_reference_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_reference_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_reference_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_media {
+  create: PagesFields_header_navItems_link_media_Create
+  read: PagesFields_header_navItems_link_media_Read
+  update: PagesFields_header_navItems_link_media_Update
+  delete: PagesFields_header_navItems_link_media_Delete
+}
+
+type PagesFields_header_navItems_link_media_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_media_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_media_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_media_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_url {
+  create: PagesFields_header_navItems_link_url_Create
+  read: PagesFields_header_navItems_link_url_Read
+  update: PagesFields_header_navItems_link_url_Update
+  delete: PagesFields_header_navItems_link_url_Delete
+}
+
+type PagesFields_header_navItems_link_url_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_url_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_url_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_url_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_label {
+  create: PagesFields_header_navItems_link_label_Create
+  read: PagesFields_header_navItems_link_label_Read
+  update: PagesFields_header_navItems_link_label_Update
+  delete: PagesFields_header_navItems_link_label_Delete
+}
+
+type PagesFields_header_navItems_link_label_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_label_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_label_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_link_label_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_id {
+  create: PagesFields_header_navItems_id_Create
+  read: PagesFields_header_navItems_id_Read
+  update: PagesFields_header_navItems_id_Update
+  delete: PagesFields_header_navItems_id_Delete
+}
+
+type PagesFields_header_navItems_id_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_id_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_id_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_id_Delete {
   permission: Boolean!
 }
 
@@ -1227,6 +2735,349 @@ type PagesUpdateAccess {
 }
 
 type PagesDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type mediaAccess {
+  fields: MediaFields
+  create: MediaCreateAccess
+  read: MediaReadAccess
+  update: MediaUpdateAccess
+  delete: MediaDeleteAccess
+}
+
+type MediaFields {
+  alt: MediaFields_alt
+  prefix: MediaFields_prefix
+  updatedAt: MediaFields_updatedAt
+  createdAt: MediaFields_createdAt
+  url: MediaFields_url
+  thumbnailURL: MediaFields_thumbnailURL
+  filename: MediaFields_filename
+  mimeType: MediaFields_mimeType
+  filesize: MediaFields_filesize
+  width: MediaFields_width
+  height: MediaFields_height
+  focalX: MediaFields_focalX
+  focalY: MediaFields_focalY
+}
+
+type MediaFields_alt {
+  create: MediaFields_alt_Create
+  read: MediaFields_alt_Read
+  update: MediaFields_alt_Update
+  delete: MediaFields_alt_Delete
+}
+
+type MediaFields_alt_Create {
+  permission: Boolean!
+}
+
+type MediaFields_alt_Read {
+  permission: Boolean!
+}
+
+type MediaFields_alt_Update {
+  permission: Boolean!
+}
+
+type MediaFields_alt_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_prefix {
+  create: MediaFields_prefix_Create
+  read: MediaFields_prefix_Read
+  update: MediaFields_prefix_Update
+  delete: MediaFields_prefix_Delete
+}
+
+type MediaFields_prefix_Create {
+  permission: Boolean!
+}
+
+type MediaFields_prefix_Read {
+  permission: Boolean!
+}
+
+type MediaFields_prefix_Update {
+  permission: Boolean!
+}
+
+type MediaFields_prefix_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_updatedAt {
+  create: MediaFields_updatedAt_Create
+  read: MediaFields_updatedAt_Read
+  update: MediaFields_updatedAt_Update
+  delete: MediaFields_updatedAt_Delete
+}
+
+type MediaFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type MediaFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type MediaFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type MediaFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt {
+  create: MediaFields_createdAt_Create
+  read: MediaFields_createdAt_Read
+  update: MediaFields_createdAt_Update
+  delete: MediaFields_createdAt_Delete
+}
+
+type MediaFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type MediaFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_url {
+  create: MediaFields_url_Create
+  read: MediaFields_url_Read
+  update: MediaFields_url_Update
+  delete: MediaFields_url_Delete
+}
+
+type MediaFields_url_Create {
+  permission: Boolean!
+}
+
+type MediaFields_url_Read {
+  permission: Boolean!
+}
+
+type MediaFields_url_Update {
+  permission: Boolean!
+}
+
+type MediaFields_url_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_thumbnailURL {
+  create: MediaFields_thumbnailURL_Create
+  read: MediaFields_thumbnailURL_Read
+  update: MediaFields_thumbnailURL_Update
+  delete: MediaFields_thumbnailURL_Delete
+}
+
+type MediaFields_thumbnailURL_Create {
+  permission: Boolean!
+}
+
+type MediaFields_thumbnailURL_Read {
+  permission: Boolean!
+}
+
+type MediaFields_thumbnailURL_Update {
+  permission: Boolean!
+}
+
+type MediaFields_thumbnailURL_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_filename {
+  create: MediaFields_filename_Create
+  read: MediaFields_filename_Read
+  update: MediaFields_filename_Update
+  delete: MediaFields_filename_Delete
+}
+
+type MediaFields_filename_Create {
+  permission: Boolean!
+}
+
+type MediaFields_filename_Read {
+  permission: Boolean!
+}
+
+type MediaFields_filename_Update {
+  permission: Boolean!
+}
+
+type MediaFields_filename_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_mimeType {
+  create: MediaFields_mimeType_Create
+  read: MediaFields_mimeType_Read
+  update: MediaFields_mimeType_Update
+  delete: MediaFields_mimeType_Delete
+}
+
+type MediaFields_mimeType_Create {
+  permission: Boolean!
+}
+
+type MediaFields_mimeType_Read {
+  permission: Boolean!
+}
+
+type MediaFields_mimeType_Update {
+  permission: Boolean!
+}
+
+type MediaFields_mimeType_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_filesize {
+  create: MediaFields_filesize_Create
+  read: MediaFields_filesize_Read
+  update: MediaFields_filesize_Update
+  delete: MediaFields_filesize_Delete
+}
+
+type MediaFields_filesize_Create {
+  permission: Boolean!
+}
+
+type MediaFields_filesize_Read {
+  permission: Boolean!
+}
+
+type MediaFields_filesize_Update {
+  permission: Boolean!
+}
+
+type MediaFields_filesize_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_width {
+  create: MediaFields_width_Create
+  read: MediaFields_width_Read
+  update: MediaFields_width_Update
+  delete: MediaFields_width_Delete
+}
+
+type MediaFields_width_Create {
+  permission: Boolean!
+}
+
+type MediaFields_width_Read {
+  permission: Boolean!
+}
+
+type MediaFields_width_Update {
+  permission: Boolean!
+}
+
+type MediaFields_width_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_height {
+  create: MediaFields_height_Create
+  read: MediaFields_height_Read
+  update: MediaFields_height_Update
+  delete: MediaFields_height_Delete
+}
+
+type MediaFields_height_Create {
+  permission: Boolean!
+}
+
+type MediaFields_height_Read {
+  permission: Boolean!
+}
+
+type MediaFields_height_Update {
+  permission: Boolean!
+}
+
+type MediaFields_height_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_focalX {
+  create: MediaFields_focalX_Create
+  read: MediaFields_focalX_Read
+  update: MediaFields_focalX_Update
+  delete: MediaFields_focalX_Delete
+}
+
+type MediaFields_focalX_Create {
+  permission: Boolean!
+}
+
+type MediaFields_focalX_Read {
+  permission: Boolean!
+}
+
+type MediaFields_focalX_Update {
+  permission: Boolean!
+}
+
+type MediaFields_focalX_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_focalY {
+  create: MediaFields_focalY_Create
+  read: MediaFields_focalY_Read
+  update: MediaFields_focalY_Update
+  delete: MediaFields_focalY_Delete
+}
+
+type MediaFields_focalY_Create {
+  permission: Boolean!
+}
+
+type MediaFields_focalY_Read {
+  permission: Boolean!
+}
+
+type MediaFields_focalY_Update {
+  permission: Boolean!
+}
+
+type MediaFields_focalY_Delete {
+  permission: Boolean!
+}
+
+type MediaCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MediaReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MediaUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type MediaDeleteAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -1382,6 +3233,97 @@ type PayloadPreferencesDeleteAccess {
   where: JSONObject
 }
 
+type themeAccess {
+  fields: ThemeFields
+  read: ThemeReadAccess
+  update: ThemeUpdateAccess
+}
+
+type ThemeFields {
+  theme: ThemeFields_theme
+  updatedAt: ThemeFields_updatedAt
+  createdAt: ThemeFields_createdAt
+}
+
+type ThemeFields_theme {
+  create: ThemeFields_theme_Create
+  read: ThemeFields_theme_Read
+  update: ThemeFields_theme_Update
+  delete: ThemeFields_theme_Delete
+}
+
+type ThemeFields_theme_Create {
+  permission: Boolean!
+}
+
+type ThemeFields_theme_Read {
+  permission: Boolean!
+}
+
+type ThemeFields_theme_Update {
+  permission: Boolean!
+}
+
+type ThemeFields_theme_Delete {
+  permission: Boolean!
+}
+
+type ThemeFields_updatedAt {
+  create: ThemeFields_updatedAt_Create
+  read: ThemeFields_updatedAt_Read
+  update: ThemeFields_updatedAt_Update
+  delete: ThemeFields_updatedAt_Delete
+}
+
+type ThemeFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type ThemeFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type ThemeFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type ThemeFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type ThemeFields_createdAt {
+  create: ThemeFields_createdAt_Create
+  read: ThemeFields_createdAt_Read
+  update: ThemeFields_createdAt_Update
+  delete: ThemeFields_createdAt_Delete
+}
+
+type ThemeFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type ThemeFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type ThemeFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type ThemeFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type ThemeReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type ThemeUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type Mutation {
   createAdmin(data: mutationAdminInput!, draft: Boolean): Admin
   updateAdmin(id: String!, autosave: Boolean, data: mutationAdminUpdateInput!, draft: Boolean): Admin
@@ -1397,10 +3339,14 @@ type Mutation {
   updatePage(id: String!, autosave: Boolean, data: mutationPageUpdateInput!, draft: Boolean): Page
   deletePage(id: String!): Page
   duplicatePage(id: String!): Page
+  createMedia(data: mutationMediaInput!, draft: Boolean): Media
+  updateMedia(id: String!, autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean): Media
+  deleteMedia(id: String!): Media
   createPayloadPreference(data: mutationPayloadPreferenceInput!, draft: Boolean): PayloadPreference
   updatePayloadPreference(id: String!, autosave: Boolean, data: mutationPayloadPreferenceUpdateInput!, draft: Boolean): PayloadPreference
   deletePayloadPreference(id: String!): PayloadPreference
   duplicatePayloadPreference(id: String!): PayloadPreference
+  updateTheme(data: mutationThemeInput!, draft: Boolean): Theme
 }
 
 input mutationAdminInput {
@@ -1455,19 +3401,113 @@ type adminsResetPassword {
 input mutationPageInput {
   title: String!
   publishedDate: String
+  header: mutationPage_HeaderInput
   layout: JSON
   slug: String
   updatedAt: String
   createdAt: String
 }
 
+input mutationPage_HeaderInput {
+  showHeader: Boolean
+  companyName: String
+  logo: String
+  navItems: [mutationPage_Header_NavItemsInput]
+}
+
+input mutationPage_Header_NavItemsInput {
+  link: mutationPage_Header_NavItems_LinkInput
+  id: String
+}
+
+input mutationPage_Header_NavItems_LinkInput {
+  type: String
+  newTab: Boolean
+  reference: Page_Header_NavItems_Link_ReferenceRelationshipInput
+  media: String
+  url: String
+  label: String!
+}
+
+input Page_Header_NavItems_Link_ReferenceRelationshipInput {
+  relationTo: Page_Header_NavItems_Link_ReferenceRelationshipInputRelationTo
+  value: JSON
+}
+
+enum Page_Header_NavItems_Link_ReferenceRelationshipInputRelationTo {
+  pages
+}
+
 input mutationPageUpdateInput {
   title: String
   publishedDate: String
+  header: mutationPageUpdate_HeaderInput
   layout: JSON
   slug: String
   updatedAt: String
   createdAt: String
+}
+
+input mutationPageUpdate_HeaderInput {
+  showHeader: Boolean
+  companyName: String
+  logo: String
+  navItems: [mutationPageUpdate_Header_NavItemsInput]
+}
+
+input mutationPageUpdate_Header_NavItemsInput {
+  link: mutationPageUpdate_Header_NavItems_LinkInput
+  id: String
+}
+
+input mutationPageUpdate_Header_NavItems_LinkInput {
+  type: String
+  newTab: Boolean
+  reference: PageUpdate_Header_NavItems_Link_ReferenceRelationshipInput
+  media: String
+  url: String
+  label: String!
+}
+
+input PageUpdate_Header_NavItems_Link_ReferenceRelationshipInput {
+  relationTo: PageUpdate_Header_NavItems_Link_ReferenceRelationshipInputRelationTo
+  value: JSON
+}
+
+enum PageUpdate_Header_NavItems_Link_ReferenceRelationshipInputRelationTo {
+  pages
+}
+
+input mutationMediaInput {
+  alt: String!
+  prefix: String
+  updatedAt: String
+  createdAt: String
+  url: String
+  thumbnailURL: String
+  filename: String
+  mimeType: String
+  filesize: Float
+  width: Float
+  height: Float
+  focalX: Float
+  focalY: Float
+}
+
+input mutationMediaUpdateInput {
+  alt: String
+  prefix: String
+  updatedAt: String
+  createdAt: String
+  url: String
+  thumbnailURL: String
+  filename: String
+  mimeType: String
+  filesize: Float
+  width: Float
+  height: Float
+  focalX: Float
+  focalY: Float
 }
 
 input mutationPayloadPreferenceInput {
@@ -1502,4 +3542,15 @@ input PayloadPreferenceUpdate_UserRelationshipInput {
 
 enum PayloadPreferenceUpdate_UserRelationshipInputRelationTo {
   admins
+}
+
+input mutationThemeInput {
+  theme: Theme_theme_MutationInput
+  updatedAt: String
+  createdAt: String
+}
+
+enum Theme_theme_MutationInput {
+  light
+  dark
 }

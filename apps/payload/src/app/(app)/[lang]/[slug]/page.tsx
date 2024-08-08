@@ -1,10 +1,12 @@
 import Blocks from '@/components/Blocks'
+import { Header } from '@/components/organisms/Header'
 import { setI18n } from '@lingui/react/server'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { notFound } from 'next/navigation'
 import { Page as TPage } from '../../../../../payload-types'
 import config from '../../../../../payload.config'
 import { allI18nInstances } from '../appRouteri18n'
+
 const payload = await getPayloadHMR({ config })
 
 export default async function Page({ params }: { params: { lang: string; slug: string } }) {
@@ -24,7 +26,12 @@ export default async function Page({ params }: { params: { lang: string; slug: s
 
   if (!page) return notFound()
 
-  return <Blocks blocks={page.layout} />
+  return (
+    <>
+      {page?.header?.showHeader && <Header header={page.header} />}
+      <Blocks blocks={page.layout} />
+    </>
+  )
 }
 
 export async function generateStaticParams() {

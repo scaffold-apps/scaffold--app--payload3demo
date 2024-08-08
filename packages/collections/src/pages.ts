@@ -1,4 +1,5 @@
 import { CollectionConfig } from "payload";
+import { headerNav } from "./fields/headerNav";
 import { layoutField } from "./fields/layout";
 import { slugField } from "./fields/slug";
 import { regenerateStaticPage } from "./utilities/regenerateStaticPage";
@@ -40,7 +41,7 @@ export const pagesCollection: CollectionConfig = {
             tabs: [
                 {
                     label: "Main",
-                    fields: [layoutField()],
+                    fields: [headerNav(), layoutField()],
                 },
             ],
         },
