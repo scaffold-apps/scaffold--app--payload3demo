@@ -295,7 +295,7 @@ type Page_Header {
   showHeader: Boolean
   companyName: String
   logo: Media
-  navItems: [Page_Header_NavItems!]
+  navItems: Page_Header_NavItems
 }
 
 type Media {
@@ -316,41 +316,66 @@ type Media {
 }
 
 type Page_Header_NavItems {
-  link: Page_Header_NavItems_Link
+  spaceBetween: Page_Header_NavItems_spaceBetween
+  items: [Page_Header_NavItems_Items!]
+}
+
+enum Page_Header_NavItems_spaceBetween {
+  space_x_2
+  space_x_4
+  space_x_6
+  space_x_8
+  space_x_12
+}
+
+type Page_Header_NavItems_Items {
+  link: Page_Header_NavItems_Items_Link
   id: String
 }
 
-type Page_Header_NavItems_Link {
-  type: Page_Header_NavItems_Link_type
+type Page_Header_NavItems_Items_Link {
+  type: Page_Header_NavItems_Items_Link_type
   newTab: Boolean
-  reference: Page_Header_NavItems_Link_Reference_Relationship
-  media: String
+  reference: Page_Header_NavItems_Items_Link_Reference_Relationship
   url: String
   label: String
+  appearance: Page_Header_NavItems_Items_Link_appearance
+  size: Page_Header_NavItems_Items_Link_size
 }
 
-enum Page_Header_NavItems_Link_type {
-  reference
+enum Page_Header_NavItems_Items_Link_type {
   custom
-  contactus
-  mediamodal
+  reference
 }
 
-type Page_Header_NavItems_Link_Reference_Relationship {
-  relationTo: Page_Header_NavItems_Link_Reference_RelationTo
-  value: Page_Header_NavItems_Link_Reference
+type Page_Header_NavItems_Items_Link_Reference_Relationship {
+  relationTo: Page_Header_NavItems_Items_Link_Reference_RelationTo
+  value: Page_Header_NavItems_Items_Link_Reference
 }
 
-enum Page_Header_NavItems_Link_Reference_RelationTo {
+enum Page_Header_NavItems_Items_Link_Reference_RelationTo {
   pages
 }
 
-union Page_Header_NavItems_Link_Reference = Page
+union Page_Header_NavItems_Items_Link_Reference = Page
+
+enum Page_Header_NavItems_Items_Link_appearance {
+  primary
+  secondary
+  link
+}
+
+enum Page_Header_NavItems_Items_Link_size {
+  small
+  medium
+  large
+}
 
 union Page_Layout = HeroBlock
 
 type HeroBlock {
   invertBackground: Boolean
+  logo(where: HeroBlock_Logo_where): Media
   title: String
   description: String
   links: [HeroBlock_Links!]
@@ -358,6 +383,211 @@ type HeroBlock {
   id: String
   blockName: String
   blockType: String
+}
+
+input HeroBlock_Logo_where {
+  alt: HeroBlock_Logo_alt_operator
+  prefix: HeroBlock_Logo_prefix_operator
+  updatedAt: HeroBlock_Logo_updatedAt_operator
+  createdAt: HeroBlock_Logo_createdAt_operator
+  url: HeroBlock_Logo_url_operator
+  thumbnailURL: HeroBlock_Logo_thumbnailURL_operator
+  filename: HeroBlock_Logo_filename_operator
+  mimeType: HeroBlock_Logo_mimeType_operator
+  filesize: HeroBlock_Logo_filesize_operator
+  width: HeroBlock_Logo_width_operator
+  height: HeroBlock_Logo_height_operator
+  focalX: HeroBlock_Logo_focalX_operator
+  focalY: HeroBlock_Logo_focalY_operator
+  id: HeroBlock_Logo_id_operator
+  AND: [HeroBlock_Logo_where_and]
+  OR: [HeroBlock_Logo_where_or]
+}
+
+input HeroBlock_Logo_alt_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input HeroBlock_Logo_prefix_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input HeroBlock_Logo_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input HeroBlock_Logo_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input HeroBlock_Logo_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input HeroBlock_Logo_thumbnailURL_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input HeroBlock_Logo_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input HeroBlock_Logo_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input HeroBlock_Logo_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input HeroBlock_Logo_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input HeroBlock_Logo_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input HeroBlock_Logo_focalX_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input HeroBlock_Logo_focalY_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input HeroBlock_Logo_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input HeroBlock_Logo_where_and {
+  alt: HeroBlock_Logo_alt_operator
+  prefix: HeroBlock_Logo_prefix_operator
+  updatedAt: HeroBlock_Logo_updatedAt_operator
+  createdAt: HeroBlock_Logo_createdAt_operator
+  url: HeroBlock_Logo_url_operator
+  thumbnailURL: HeroBlock_Logo_thumbnailURL_operator
+  filename: HeroBlock_Logo_filename_operator
+  mimeType: HeroBlock_Logo_mimeType_operator
+  filesize: HeroBlock_Logo_filesize_operator
+  width: HeroBlock_Logo_width_operator
+  height: HeroBlock_Logo_height_operator
+  focalX: HeroBlock_Logo_focalX_operator
+  focalY: HeroBlock_Logo_focalY_operator
+  id: HeroBlock_Logo_id_operator
+  AND: [HeroBlock_Logo_where_and]
+  OR: [HeroBlock_Logo_where_or]
+}
+
+input HeroBlock_Logo_where_or {
+  alt: HeroBlock_Logo_alt_operator
+  prefix: HeroBlock_Logo_prefix_operator
+  updatedAt: HeroBlock_Logo_updatedAt_operator
+  createdAt: HeroBlock_Logo_createdAt_operator
+  url: HeroBlock_Logo_url_operator
+  thumbnailURL: HeroBlock_Logo_thumbnailURL_operator
+  filename: HeroBlock_Logo_filename_operator
+  mimeType: HeroBlock_Logo_mimeType_operator
+  filesize: HeroBlock_Logo_filesize_operator
+  width: HeroBlock_Logo_width_operator
+  height: HeroBlock_Logo_height_operator
+  focalX: HeroBlock_Logo_focalX_operator
+  focalY: HeroBlock_Logo_focalY_operator
+  id: HeroBlock_Logo_id_operator
+  AND: [HeroBlock_Logo_where_and]
+  OR: [HeroBlock_Logo_where_or]
 }
 
 type HeroBlock_Links {
@@ -369,17 +599,15 @@ type HeroBlock_Links_Link {
   type: HeroBlock_Links_Link_type
   newTab: Boolean
   reference: HeroBlock_Links_Link_Reference_Relationship
-  media: String
   url: String
   label: String
   appearance: HeroBlock_Links_Link_appearance
+  size: HeroBlock_Links_Link_size
 }
 
 enum HeroBlock_Links_Link_type {
-  reference
   custom
-  contactus
-  mediamodal
+  reference
 }
 
 type HeroBlock_Links_Link_Reference_Relationship {
@@ -396,6 +624,12 @@ union HeroBlock_Links_Link_Reference = Page
 enum HeroBlock_Links_Link_appearance {
   primary
   secondary
+}
+
+enum HeroBlock_Links_Link_size {
+  small
+  medium
+  large
 }
 
 type Pages {
@@ -418,13 +652,15 @@ input Page_where {
   header__showHeader: Page_header__showHeader_operator
   header__companyName: Page_header__companyName_operator
   header__logo: Page_header__logo_operator
-  header__navItems__link__type: Page_header__navItems__link__type_operator
-  header__navItems__link__newTab: Page_header__navItems__link__newTab_operator
-  header__navItems__link__reference: Page_header__navItems__link__reference_Relation
-  header__navItems__link__media: Page_header__navItems__link__media_operator
-  header__navItems__link__url: Page_header__navItems__link__url_operator
-  header__navItems__link__label: Page_header__navItems__link__label_operator
-  header__navItems__id: Page_header__navItems__id_operator
+  header__navItems__spaceBetween: Page_header__navItems__spaceBetween_operator
+  header__navItems__items__link__type: Page_header__navItems__items__link__type_operator
+  header__navItems__items__link__newTab: Page_header__navItems__items__link__newTab_operator
+  header__navItems__items__link__reference: Page_header__navItems__items__link__reference_Relation
+  header__navItems__items__link__url: Page_header__navItems__items__link__url_operator
+  header__navItems__items__link__label: Page_header__navItems__items__link__label_operator
+  header__navItems__items__link__appearance: Page_header__navItems__items__link__appearance_operator
+  header__navItems__items__link__size: Page_header__navItems__items__link__size_operator
+  header__navItems__items__id: Page_header__navItems__items__id_operator
   slug: Page_slug_operator
   updatedAt: Page_updatedAt_operator
   createdAt: Page_createdAt_operator
@@ -485,37 +721,53 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
-input Page_header__navItems__link__type_operator {
-  equals: Page_header__navItems__link__type_Input
-  not_equals: Page_header__navItems__link__type_Input
-  like: Page_header__navItems__link__type_Input
-  contains: Page_header__navItems__link__type_Input
+input Page_header__navItems__spaceBetween_operator {
+  equals: Page_header__navItems__spaceBetween_Input
+  not_equals: Page_header__navItems__spaceBetween_Input
+  in: [Page_header__navItems__spaceBetween_Input]
+  not_in: [Page_header__navItems__spaceBetween_Input]
+  all: [Page_header__navItems__spaceBetween_Input]
   exists: Boolean
 }
 
-enum Page_header__navItems__link__type_Input {
-  reference
-  custom
-  contactus
-  mediamodal
+enum Page_header__navItems__spaceBetween_Input {
+  space_x_2
+  space_x_4
+  space_x_6
+  space_x_8
+  space_x_12
 }
 
-input Page_header__navItems__link__newTab_operator {
+input Page_header__navItems__items__link__type_operator {
+  equals: Page_header__navItems__items__link__type_Input
+  not_equals: Page_header__navItems__items__link__type_Input
+  in: [Page_header__navItems__items__link__type_Input]
+  not_in: [Page_header__navItems__items__link__type_Input]
+  all: [Page_header__navItems__items__link__type_Input]
+  exists: Boolean
+}
+
+enum Page_header__navItems__items__link__type_Input {
+  custom
+  reference
+}
+
+input Page_header__navItems__items__link__newTab_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
 }
 
-input Page_header__navItems__link__reference_Relation {
-  relationTo: Page_header__navItems__link__reference_Relation_RelationTo
+input Page_header__navItems__items__link__reference_Relation {
+  relationTo: Page_header__navItems__items__link__reference_Relation_RelationTo
   value: JSON
 }
 
-enum Page_header__navItems__link__reference_Relation_RelationTo {
+enum Page_header__navItems__items__link__reference_Relation_RelationTo {
   pages
 }
 
-input Page_header__navItems__link__media_operator {
+input Page_header__navItems__items__link__url_operator {
   equals: String
   not_equals: String
   like: String
@@ -525,7 +777,7 @@ input Page_header__navItems__link__media_operator {
   all: [String]
 }
 
-input Page_header__navItems__link__url_operator {
+input Page_header__navItems__items__link__label_operator {
   equals: String
   not_equals: String
   like: String
@@ -535,17 +787,37 @@ input Page_header__navItems__link__url_operator {
   all: [String]
 }
 
-input Page_header__navItems__link__label_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
+input Page_header__navItems__items__link__appearance_operator {
+  equals: Page_header__navItems__items__link__appearance_Input
+  not_equals: Page_header__navItems__items__link__appearance_Input
+  in: [Page_header__navItems__items__link__appearance_Input]
+  not_in: [Page_header__navItems__items__link__appearance_Input]
+  all: [Page_header__navItems__items__link__appearance_Input]
+  exists: Boolean
 }
 
-input Page_header__navItems__id_operator {
+enum Page_header__navItems__items__link__appearance_Input {
+  primary
+  secondary
+  link
+}
+
+input Page_header__navItems__items__link__size_operator {
+  equals: Page_header__navItems__items__link__size_Input
+  not_equals: Page_header__navItems__items__link__size_Input
+  in: [Page_header__navItems__items__link__size_Input]
+  not_in: [Page_header__navItems__items__link__size_Input]
+  all: [Page_header__navItems__items__link__size_Input]
+  exists: Boolean
+}
+
+enum Page_header__navItems__items__link__size_Input {
+  small
+  medium
+  large
+}
+
+input Page_header__navItems__items__id_operator {
   equals: String
   not_equals: String
   like: String
@@ -606,13 +878,15 @@ input Page_where_and {
   header__showHeader: Page_header__showHeader_operator
   header__companyName: Page_header__companyName_operator
   header__logo: Page_header__logo_operator
-  header__navItems__link__type: Page_header__navItems__link__type_operator
-  header__navItems__link__newTab: Page_header__navItems__link__newTab_operator
-  header__navItems__link__reference: Page_header__navItems__link__reference_Relation
-  header__navItems__link__media: Page_header__navItems__link__media_operator
-  header__navItems__link__url: Page_header__navItems__link__url_operator
-  header__navItems__link__label: Page_header__navItems__link__label_operator
-  header__navItems__id: Page_header__navItems__id_operator
+  header__navItems__spaceBetween: Page_header__navItems__spaceBetween_operator
+  header__navItems__items__link__type: Page_header__navItems__items__link__type_operator
+  header__navItems__items__link__newTab: Page_header__navItems__items__link__newTab_operator
+  header__navItems__items__link__reference: Page_header__navItems__items__link__reference_Relation
+  header__navItems__items__link__url: Page_header__navItems__items__link__url_operator
+  header__navItems__items__link__label: Page_header__navItems__items__link__label_operator
+  header__navItems__items__link__appearance: Page_header__navItems__items__link__appearance_operator
+  header__navItems__items__link__size: Page_header__navItems__items__link__size_operator
+  header__navItems__items__id: Page_header__navItems__items__id_operator
   slug: Page_slug_operator
   updatedAt: Page_updatedAt_operator
   createdAt: Page_createdAt_operator
@@ -627,13 +901,15 @@ input Page_where_or {
   header__showHeader: Page_header__showHeader_operator
   header__companyName: Page_header__companyName_operator
   header__logo: Page_header__logo_operator
-  header__navItems__link__type: Page_header__navItems__link__type_operator
-  header__navItems__link__newTab: Page_header__navItems__link__newTab_operator
-  header__navItems__link__reference: Page_header__navItems__link__reference_Relation
-  header__navItems__link__media: Page_header__navItems__link__media_operator
-  header__navItems__link__url: Page_header__navItems__link__url_operator
-  header__navItems__link__label: Page_header__navItems__link__label_operator
-  header__navItems__id: Page_header__navItems__id_operator
+  header__navItems__spaceBetween: Page_header__navItems__spaceBetween_operator
+  header__navItems__items__link__type: Page_header__navItems__items__link__type_operator
+  header__navItems__items__link__newTab: Page_header__navItems__items__link__newTab_operator
+  header__navItems__items__link__reference: Page_header__navItems__items__link__reference_Relation
+  header__navItems__items__link__url: Page_header__navItems__items__link__url_operator
+  header__navItems__items__link__label: Page_header__navItems__items__link__label_operator
+  header__navItems__items__link__appearance: Page_header__navItems__items__link__appearance_operator
+  header__navItems__items__link__size: Page_header__navItems__items__link__size_operator
+  header__navItems__items__id: Page_header__navItems__items__id_operator
   slug: Page_slug_operator
   updatedAt: Page_updatedAt_operator
   createdAt: Page_createdAt_operator
@@ -835,201 +1111,277 @@ type PagesDocAccessFields_header_navItems_Delete {
 }
 
 type PagesDocAccessFields_header_navItems_Fields {
-  link: PagesDocAccessFields_header_navItems_link
-  id: PagesDocAccessFields_header_navItems_id
+  spaceBetween: PagesDocAccessFields_header_navItems_spaceBetween
+  items: PagesDocAccessFields_header_navItems_items
 }
 
-type PagesDocAccessFields_header_navItems_link {
-  create: PagesDocAccessFields_header_navItems_link_Create
-  read: PagesDocAccessFields_header_navItems_link_Read
-  update: PagesDocAccessFields_header_navItems_link_Update
-  delete: PagesDocAccessFields_header_navItems_link_Delete
-  fields: PagesDocAccessFields_header_navItems_link_Fields
+type PagesDocAccessFields_header_navItems_spaceBetween {
+  create: PagesDocAccessFields_header_navItems_spaceBetween_Create
+  read: PagesDocAccessFields_header_navItems_spaceBetween_Read
+  update: PagesDocAccessFields_header_navItems_spaceBetween_Update
+  delete: PagesDocAccessFields_header_navItems_spaceBetween_Delete
 }
 
-type PagesDocAccessFields_header_navItems_link_Create {
+type PagesDocAccessFields_header_navItems_spaceBetween_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_Read {
+type PagesDocAccessFields_header_navItems_spaceBetween_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_Update {
+type PagesDocAccessFields_header_navItems_spaceBetween_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_Delete {
+type PagesDocAccessFields_header_navItems_spaceBetween_Delete {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_Fields {
-  type: PagesDocAccessFields_header_navItems_link_type
-  newTab: PagesDocAccessFields_header_navItems_link_newTab
-  reference: PagesDocAccessFields_header_navItems_link_reference
-  media: PagesDocAccessFields_header_navItems_link_media
-  url: PagesDocAccessFields_header_navItems_link_url
-  label: PagesDocAccessFields_header_navItems_link_label
+type PagesDocAccessFields_header_navItems_items {
+  create: PagesDocAccessFields_header_navItems_items_Create
+  read: PagesDocAccessFields_header_navItems_items_Read
+  update: PagesDocAccessFields_header_navItems_items_Update
+  delete: PagesDocAccessFields_header_navItems_items_Delete
+  fields: PagesDocAccessFields_header_navItems_items_Fields
 }
 
-type PagesDocAccessFields_header_navItems_link_type {
-  create: PagesDocAccessFields_header_navItems_link_type_Create
-  read: PagesDocAccessFields_header_navItems_link_type_Read
-  update: PagesDocAccessFields_header_navItems_link_type_Update
-  delete: PagesDocAccessFields_header_navItems_link_type_Delete
-}
-
-type PagesDocAccessFields_header_navItems_link_type_Create {
+type PagesDocAccessFields_header_navItems_items_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_type_Read {
+type PagesDocAccessFields_header_navItems_items_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_type_Update {
+type PagesDocAccessFields_header_navItems_items_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_type_Delete {
+type PagesDocAccessFields_header_navItems_items_Delete {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_newTab {
-  create: PagesDocAccessFields_header_navItems_link_newTab_Create
-  read: PagesDocAccessFields_header_navItems_link_newTab_Read
-  update: PagesDocAccessFields_header_navItems_link_newTab_Update
-  delete: PagesDocAccessFields_header_navItems_link_newTab_Delete
+type PagesDocAccessFields_header_navItems_items_Fields {
+  link: PagesDocAccessFields_header_navItems_items_link
+  id: PagesDocAccessFields_header_navItems_items_id
 }
 
-type PagesDocAccessFields_header_navItems_link_newTab_Create {
+type PagesDocAccessFields_header_navItems_items_link {
+  create: PagesDocAccessFields_header_navItems_items_link_Create
+  read: PagesDocAccessFields_header_navItems_items_link_Read
+  update: PagesDocAccessFields_header_navItems_items_link_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_Delete
+  fields: PagesDocAccessFields_header_navItems_items_link_Fields
+}
+
+type PagesDocAccessFields_header_navItems_items_link_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_newTab_Read {
+type PagesDocAccessFields_header_navItems_items_link_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_newTab_Update {
+type PagesDocAccessFields_header_navItems_items_link_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_newTab_Delete {
+type PagesDocAccessFields_header_navItems_items_link_Delete {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_reference {
-  create: PagesDocAccessFields_header_navItems_link_reference_Create
-  read: PagesDocAccessFields_header_navItems_link_reference_Read
-  update: PagesDocAccessFields_header_navItems_link_reference_Update
-  delete: PagesDocAccessFields_header_navItems_link_reference_Delete
+type PagesDocAccessFields_header_navItems_items_link_Fields {
+  type: PagesDocAccessFields_header_navItems_items_link_type
+  newTab: PagesDocAccessFields_header_navItems_items_link_newTab
+  reference: PagesDocAccessFields_header_navItems_items_link_reference
+  url: PagesDocAccessFields_header_navItems_items_link_url
+  label: PagesDocAccessFields_header_navItems_items_link_label
+  appearance: PagesDocAccessFields_header_navItems_items_link_appearance
+  size: PagesDocAccessFields_header_navItems_items_link_size
 }
 
-type PagesDocAccessFields_header_navItems_link_reference_Create {
+type PagesDocAccessFields_header_navItems_items_link_type {
+  create: PagesDocAccessFields_header_navItems_items_link_type_Create
+  read: PagesDocAccessFields_header_navItems_items_link_type_Read
+  update: PagesDocAccessFields_header_navItems_items_link_type_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_type_Delete
+}
+
+type PagesDocAccessFields_header_navItems_items_link_type_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_reference_Read {
+type PagesDocAccessFields_header_navItems_items_link_type_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_reference_Update {
+type PagesDocAccessFields_header_navItems_items_link_type_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_reference_Delete {
+type PagesDocAccessFields_header_navItems_items_link_type_Delete {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_media {
-  create: PagesDocAccessFields_header_navItems_link_media_Create
-  read: PagesDocAccessFields_header_navItems_link_media_Read
-  update: PagesDocAccessFields_header_navItems_link_media_Update
-  delete: PagesDocAccessFields_header_navItems_link_media_Delete
+type PagesDocAccessFields_header_navItems_items_link_newTab {
+  create: PagesDocAccessFields_header_navItems_items_link_newTab_Create
+  read: PagesDocAccessFields_header_navItems_items_link_newTab_Read
+  update: PagesDocAccessFields_header_navItems_items_link_newTab_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_newTab_Delete
 }
 
-type PagesDocAccessFields_header_navItems_link_media_Create {
+type PagesDocAccessFields_header_navItems_items_link_newTab_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_media_Read {
+type PagesDocAccessFields_header_navItems_items_link_newTab_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_media_Update {
+type PagesDocAccessFields_header_navItems_items_link_newTab_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_media_Delete {
+type PagesDocAccessFields_header_navItems_items_link_newTab_Delete {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_url {
-  create: PagesDocAccessFields_header_navItems_link_url_Create
-  read: PagesDocAccessFields_header_navItems_link_url_Read
-  update: PagesDocAccessFields_header_navItems_link_url_Update
-  delete: PagesDocAccessFields_header_navItems_link_url_Delete
+type PagesDocAccessFields_header_navItems_items_link_reference {
+  create: PagesDocAccessFields_header_navItems_items_link_reference_Create
+  read: PagesDocAccessFields_header_navItems_items_link_reference_Read
+  update: PagesDocAccessFields_header_navItems_items_link_reference_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_reference_Delete
 }
 
-type PagesDocAccessFields_header_navItems_link_url_Create {
+type PagesDocAccessFields_header_navItems_items_link_reference_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_url_Read {
+type PagesDocAccessFields_header_navItems_items_link_reference_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_url_Update {
+type PagesDocAccessFields_header_navItems_items_link_reference_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_url_Delete {
+type PagesDocAccessFields_header_navItems_items_link_reference_Delete {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_label {
-  create: PagesDocAccessFields_header_navItems_link_label_Create
-  read: PagesDocAccessFields_header_navItems_link_label_Read
-  update: PagesDocAccessFields_header_navItems_link_label_Update
-  delete: PagesDocAccessFields_header_navItems_link_label_Delete
+type PagesDocAccessFields_header_navItems_items_link_url {
+  create: PagesDocAccessFields_header_navItems_items_link_url_Create
+  read: PagesDocAccessFields_header_navItems_items_link_url_Read
+  update: PagesDocAccessFields_header_navItems_items_link_url_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_url_Delete
 }
 
-type PagesDocAccessFields_header_navItems_link_label_Create {
+type PagesDocAccessFields_header_navItems_items_link_url_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_label_Read {
+type PagesDocAccessFields_header_navItems_items_link_url_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_label_Update {
+type PagesDocAccessFields_header_navItems_items_link_url_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_link_label_Delete {
+type PagesDocAccessFields_header_navItems_items_link_url_Delete {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_id {
-  create: PagesDocAccessFields_header_navItems_id_Create
-  read: PagesDocAccessFields_header_navItems_id_Read
-  update: PagesDocAccessFields_header_navItems_id_Update
-  delete: PagesDocAccessFields_header_navItems_id_Delete
+type PagesDocAccessFields_header_navItems_items_link_label {
+  create: PagesDocAccessFields_header_navItems_items_link_label_Create
+  read: PagesDocAccessFields_header_navItems_items_link_label_Read
+  update: PagesDocAccessFields_header_navItems_items_link_label_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_label_Delete
 }
 
-type PagesDocAccessFields_header_navItems_id_Create {
+type PagesDocAccessFields_header_navItems_items_link_label_Create {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_id_Read {
+type PagesDocAccessFields_header_navItems_items_link_label_Read {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_id_Update {
+type PagesDocAccessFields_header_navItems_items_link_label_Update {
   permission: Boolean!
 }
 
-type PagesDocAccessFields_header_navItems_id_Delete {
+type PagesDocAccessFields_header_navItems_items_link_label_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_appearance {
+  create: PagesDocAccessFields_header_navItems_items_link_appearance_Create
+  read: PagesDocAccessFields_header_navItems_items_link_appearance_Read
+  update: PagesDocAccessFields_header_navItems_items_link_appearance_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_appearance_Delete
+}
+
+type PagesDocAccessFields_header_navItems_items_link_appearance_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_appearance_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_appearance_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_appearance_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_size {
+  create: PagesDocAccessFields_header_navItems_items_link_size_Create
+  read: PagesDocAccessFields_header_navItems_items_link_size_Read
+  update: PagesDocAccessFields_header_navItems_items_link_size_Update
+  delete: PagesDocAccessFields_header_navItems_items_link_size_Delete
+}
+
+type PagesDocAccessFields_header_navItems_items_link_size_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_size_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_size_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_link_size_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_id {
+  create: PagesDocAccessFields_header_navItems_items_id_Create
+  read: PagesDocAccessFields_header_navItems_items_id_Read
+  update: PagesDocAccessFields_header_navItems_items_id_Update
+  delete: PagesDocAccessFields_header_navItems_items_id_Delete
+}
+
+type PagesDocAccessFields_header_navItems_items_id_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_id_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_id_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_header_navItems_items_id_Delete {
   permission: Boolean!
 }
 
@@ -2429,201 +2781,277 @@ type PagesFields_header_navItems_Delete {
 }
 
 type PagesFields_header_navItems_Fields {
-  link: PagesFields_header_navItems_link
-  id: PagesFields_header_navItems_id
+  spaceBetween: PagesFields_header_navItems_spaceBetween
+  items: PagesFields_header_navItems_items
 }
 
-type PagesFields_header_navItems_link {
-  create: PagesFields_header_navItems_link_Create
-  read: PagesFields_header_navItems_link_Read
-  update: PagesFields_header_navItems_link_Update
-  delete: PagesFields_header_navItems_link_Delete
-  fields: PagesFields_header_navItems_link_Fields
+type PagesFields_header_navItems_spaceBetween {
+  create: PagesFields_header_navItems_spaceBetween_Create
+  read: PagesFields_header_navItems_spaceBetween_Read
+  update: PagesFields_header_navItems_spaceBetween_Update
+  delete: PagesFields_header_navItems_spaceBetween_Delete
 }
 
-type PagesFields_header_navItems_link_Create {
+type PagesFields_header_navItems_spaceBetween_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_Read {
+type PagesFields_header_navItems_spaceBetween_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_Update {
+type PagesFields_header_navItems_spaceBetween_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_Delete {
+type PagesFields_header_navItems_spaceBetween_Delete {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_Fields {
-  type: PagesFields_header_navItems_link_type
-  newTab: PagesFields_header_navItems_link_newTab
-  reference: PagesFields_header_navItems_link_reference
-  media: PagesFields_header_navItems_link_media
-  url: PagesFields_header_navItems_link_url
-  label: PagesFields_header_navItems_link_label
+type PagesFields_header_navItems_items {
+  create: PagesFields_header_navItems_items_Create
+  read: PagesFields_header_navItems_items_Read
+  update: PagesFields_header_navItems_items_Update
+  delete: PagesFields_header_navItems_items_Delete
+  fields: PagesFields_header_navItems_items_Fields
 }
 
-type PagesFields_header_navItems_link_type {
-  create: PagesFields_header_navItems_link_type_Create
-  read: PagesFields_header_navItems_link_type_Read
-  update: PagesFields_header_navItems_link_type_Update
-  delete: PagesFields_header_navItems_link_type_Delete
-}
-
-type PagesFields_header_navItems_link_type_Create {
+type PagesFields_header_navItems_items_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_type_Read {
+type PagesFields_header_navItems_items_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_type_Update {
+type PagesFields_header_navItems_items_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_type_Delete {
+type PagesFields_header_navItems_items_Delete {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_newTab {
-  create: PagesFields_header_navItems_link_newTab_Create
-  read: PagesFields_header_navItems_link_newTab_Read
-  update: PagesFields_header_navItems_link_newTab_Update
-  delete: PagesFields_header_navItems_link_newTab_Delete
+type PagesFields_header_navItems_items_Fields {
+  link: PagesFields_header_navItems_items_link
+  id: PagesFields_header_navItems_items_id
 }
 
-type PagesFields_header_navItems_link_newTab_Create {
+type PagesFields_header_navItems_items_link {
+  create: PagesFields_header_navItems_items_link_Create
+  read: PagesFields_header_navItems_items_link_Read
+  update: PagesFields_header_navItems_items_link_Update
+  delete: PagesFields_header_navItems_items_link_Delete
+  fields: PagesFields_header_navItems_items_link_Fields
+}
+
+type PagesFields_header_navItems_items_link_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_newTab_Read {
+type PagesFields_header_navItems_items_link_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_newTab_Update {
+type PagesFields_header_navItems_items_link_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_newTab_Delete {
+type PagesFields_header_navItems_items_link_Delete {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_reference {
-  create: PagesFields_header_navItems_link_reference_Create
-  read: PagesFields_header_navItems_link_reference_Read
-  update: PagesFields_header_navItems_link_reference_Update
-  delete: PagesFields_header_navItems_link_reference_Delete
+type PagesFields_header_navItems_items_link_Fields {
+  type: PagesFields_header_navItems_items_link_type
+  newTab: PagesFields_header_navItems_items_link_newTab
+  reference: PagesFields_header_navItems_items_link_reference
+  url: PagesFields_header_navItems_items_link_url
+  label: PagesFields_header_navItems_items_link_label
+  appearance: PagesFields_header_navItems_items_link_appearance
+  size: PagesFields_header_navItems_items_link_size
 }
 
-type PagesFields_header_navItems_link_reference_Create {
+type PagesFields_header_navItems_items_link_type {
+  create: PagesFields_header_navItems_items_link_type_Create
+  read: PagesFields_header_navItems_items_link_type_Read
+  update: PagesFields_header_navItems_items_link_type_Update
+  delete: PagesFields_header_navItems_items_link_type_Delete
+}
+
+type PagesFields_header_navItems_items_link_type_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_reference_Read {
+type PagesFields_header_navItems_items_link_type_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_reference_Update {
+type PagesFields_header_navItems_items_link_type_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_reference_Delete {
+type PagesFields_header_navItems_items_link_type_Delete {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_media {
-  create: PagesFields_header_navItems_link_media_Create
-  read: PagesFields_header_navItems_link_media_Read
-  update: PagesFields_header_navItems_link_media_Update
-  delete: PagesFields_header_navItems_link_media_Delete
+type PagesFields_header_navItems_items_link_newTab {
+  create: PagesFields_header_navItems_items_link_newTab_Create
+  read: PagesFields_header_navItems_items_link_newTab_Read
+  update: PagesFields_header_navItems_items_link_newTab_Update
+  delete: PagesFields_header_navItems_items_link_newTab_Delete
 }
 
-type PagesFields_header_navItems_link_media_Create {
+type PagesFields_header_navItems_items_link_newTab_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_media_Read {
+type PagesFields_header_navItems_items_link_newTab_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_media_Update {
+type PagesFields_header_navItems_items_link_newTab_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_media_Delete {
+type PagesFields_header_navItems_items_link_newTab_Delete {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_url {
-  create: PagesFields_header_navItems_link_url_Create
-  read: PagesFields_header_navItems_link_url_Read
-  update: PagesFields_header_navItems_link_url_Update
-  delete: PagesFields_header_navItems_link_url_Delete
+type PagesFields_header_navItems_items_link_reference {
+  create: PagesFields_header_navItems_items_link_reference_Create
+  read: PagesFields_header_navItems_items_link_reference_Read
+  update: PagesFields_header_navItems_items_link_reference_Update
+  delete: PagesFields_header_navItems_items_link_reference_Delete
 }
 
-type PagesFields_header_navItems_link_url_Create {
+type PagesFields_header_navItems_items_link_reference_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_url_Read {
+type PagesFields_header_navItems_items_link_reference_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_url_Update {
+type PagesFields_header_navItems_items_link_reference_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_url_Delete {
+type PagesFields_header_navItems_items_link_reference_Delete {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_label {
-  create: PagesFields_header_navItems_link_label_Create
-  read: PagesFields_header_navItems_link_label_Read
-  update: PagesFields_header_navItems_link_label_Update
-  delete: PagesFields_header_navItems_link_label_Delete
+type PagesFields_header_navItems_items_link_url {
+  create: PagesFields_header_navItems_items_link_url_Create
+  read: PagesFields_header_navItems_items_link_url_Read
+  update: PagesFields_header_navItems_items_link_url_Update
+  delete: PagesFields_header_navItems_items_link_url_Delete
 }
 
-type PagesFields_header_navItems_link_label_Create {
+type PagesFields_header_navItems_items_link_url_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_label_Read {
+type PagesFields_header_navItems_items_link_url_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_label_Update {
+type PagesFields_header_navItems_items_link_url_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_link_label_Delete {
+type PagesFields_header_navItems_items_link_url_Delete {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_id {
-  create: PagesFields_header_navItems_id_Create
-  read: PagesFields_header_navItems_id_Read
-  update: PagesFields_header_navItems_id_Update
-  delete: PagesFields_header_navItems_id_Delete
+type PagesFields_header_navItems_items_link_label {
+  create: PagesFields_header_navItems_items_link_label_Create
+  read: PagesFields_header_navItems_items_link_label_Read
+  update: PagesFields_header_navItems_items_link_label_Update
+  delete: PagesFields_header_navItems_items_link_label_Delete
 }
 
-type PagesFields_header_navItems_id_Create {
+type PagesFields_header_navItems_items_link_label_Create {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_id_Read {
+type PagesFields_header_navItems_items_link_label_Read {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_id_Update {
+type PagesFields_header_navItems_items_link_label_Update {
   permission: Boolean!
 }
 
-type PagesFields_header_navItems_id_Delete {
+type PagesFields_header_navItems_items_link_label_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_appearance {
+  create: PagesFields_header_navItems_items_link_appearance_Create
+  read: PagesFields_header_navItems_items_link_appearance_Read
+  update: PagesFields_header_navItems_items_link_appearance_Update
+  delete: PagesFields_header_navItems_items_link_appearance_Delete
+}
+
+type PagesFields_header_navItems_items_link_appearance_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_appearance_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_appearance_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_appearance_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_size {
+  create: PagesFields_header_navItems_items_link_size_Create
+  read: PagesFields_header_navItems_items_link_size_Read
+  update: PagesFields_header_navItems_items_link_size_Update
+  delete: PagesFields_header_navItems_items_link_size_Delete
+}
+
+type PagesFields_header_navItems_items_link_size_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_size_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_size_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_link_size_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_id {
+  create: PagesFields_header_navItems_items_id_Create
+  read: PagesFields_header_navItems_items_id_Read
+  update: PagesFields_header_navItems_items_id_Update
+  delete: PagesFields_header_navItems_items_id_Delete
+}
+
+type PagesFields_header_navItems_items_id_Create {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_id_Read {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_id_Update {
+  permission: Boolean!
+}
+
+type PagesFields_header_navItems_items_id_Delete {
   permission: Boolean!
 }
 
@@ -3412,30 +3840,61 @@ input mutationPage_HeaderInput {
   showHeader: Boolean
   companyName: String
   logo: String
-  navItems: [mutationPage_Header_NavItemsInput]
+  navItems: mutationPage_Header_NavItemsInput
 }
 
 input mutationPage_Header_NavItemsInput {
-  link: mutationPage_Header_NavItems_LinkInput
+  spaceBetween: Page_Header_NavItems_spaceBetween_MutationInput
+  items: [mutationPage_Header_NavItems_ItemsInput]
+}
+
+enum Page_Header_NavItems_spaceBetween_MutationInput {
+  space_x_2
+  space_x_4
+  space_x_6
+  space_x_8
+  space_x_12
+}
+
+input mutationPage_Header_NavItems_ItemsInput {
+  link: mutationPage_Header_NavItems_Items_LinkInput
   id: String
 }
 
-input mutationPage_Header_NavItems_LinkInput {
-  type: String
+input mutationPage_Header_NavItems_Items_LinkInput {
+  type: Page_Header_NavItems_Items_Link_type_MutationInput
   newTab: Boolean
-  reference: Page_Header_NavItems_Link_ReferenceRelationshipInput
-  media: String
+  reference: Page_Header_NavItems_Items_Link_ReferenceRelationshipInput
   url: String
   label: String!
+  appearance: Page_Header_NavItems_Items_Link_appearance_MutationInput
+  size: Page_Header_NavItems_Items_Link_size_MutationInput
 }
 
-input Page_Header_NavItems_Link_ReferenceRelationshipInput {
-  relationTo: Page_Header_NavItems_Link_ReferenceRelationshipInputRelationTo
+enum Page_Header_NavItems_Items_Link_type_MutationInput {
+  custom
+  reference
+}
+
+input Page_Header_NavItems_Items_Link_ReferenceRelationshipInput {
+  relationTo: Page_Header_NavItems_Items_Link_ReferenceRelationshipInputRelationTo
   value: JSON
 }
 
-enum Page_Header_NavItems_Link_ReferenceRelationshipInputRelationTo {
+enum Page_Header_NavItems_Items_Link_ReferenceRelationshipInputRelationTo {
   pages
+}
+
+enum Page_Header_NavItems_Items_Link_appearance_MutationInput {
+  primary
+  secondary
+  link
+}
+
+enum Page_Header_NavItems_Items_Link_size_MutationInput {
+  small
+  medium
+  large
 }
 
 input mutationPageUpdateInput {
@@ -3452,30 +3911,61 @@ input mutationPageUpdate_HeaderInput {
   showHeader: Boolean
   companyName: String
   logo: String
-  navItems: [mutationPageUpdate_Header_NavItemsInput]
+  navItems: mutationPageUpdate_Header_NavItemsInput
 }
 
 input mutationPageUpdate_Header_NavItemsInput {
-  link: mutationPageUpdate_Header_NavItems_LinkInput
+  spaceBetween: PageUpdate_Header_NavItems_spaceBetween_MutationInput
+  items: [mutationPageUpdate_Header_NavItems_ItemsInput]
+}
+
+enum PageUpdate_Header_NavItems_spaceBetween_MutationInput {
+  space_x_2
+  space_x_4
+  space_x_6
+  space_x_8
+  space_x_12
+}
+
+input mutationPageUpdate_Header_NavItems_ItemsInput {
+  link: mutationPageUpdate_Header_NavItems_Items_LinkInput
   id: String
 }
 
-input mutationPageUpdate_Header_NavItems_LinkInput {
-  type: String
+input mutationPageUpdate_Header_NavItems_Items_LinkInput {
+  type: PageUpdate_Header_NavItems_Items_Link_type_MutationInput
   newTab: Boolean
-  reference: PageUpdate_Header_NavItems_Link_ReferenceRelationshipInput
-  media: String
+  reference: PageUpdate_Header_NavItems_Items_Link_ReferenceRelationshipInput
   url: String
   label: String!
+  appearance: PageUpdate_Header_NavItems_Items_Link_appearance_MutationInput
+  size: PageUpdate_Header_NavItems_Items_Link_size_MutationInput
 }
 
-input PageUpdate_Header_NavItems_Link_ReferenceRelationshipInput {
-  relationTo: PageUpdate_Header_NavItems_Link_ReferenceRelationshipInputRelationTo
+enum PageUpdate_Header_NavItems_Items_Link_type_MutationInput {
+  custom
+  reference
+}
+
+input PageUpdate_Header_NavItems_Items_Link_ReferenceRelationshipInput {
+  relationTo: PageUpdate_Header_NavItems_Items_Link_ReferenceRelationshipInputRelationTo
   value: JSON
 }
 
-enum PageUpdate_Header_NavItems_Link_ReferenceRelationshipInputRelationTo {
+enum PageUpdate_Header_NavItems_Items_Link_ReferenceRelationshipInputRelationTo {
   pages
+}
+
+enum PageUpdate_Header_NavItems_Items_Link_appearance_MutationInput {
+  primary
+  secondary
+  link
+}
+
+enum PageUpdate_Header_NavItems_Items_Link_size_MutationInput {
+  small
+  medium
+  large
 }
 
 input mutationMediaInput {

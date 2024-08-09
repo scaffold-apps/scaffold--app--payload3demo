@@ -25,14 +25,34 @@ export const headerNav: HeaderNav = (overrides = {}) =>
                     type: "relationship",
                     relationTo: "media",
                 },
+
                 {
                     name: "navItems",
-                    type: "array",
-                    maxRows: 6,
+                    type: "group",
                     fields: [
-                        link({
-                            appearances: false,
-                        }),
+                        {
+                            name: "spaceBetween",
+                            type: "select",
+                            label: "Space Between",
+                            options: [
+                                { label: "Extra Small", value: "space-x-2" },
+                                { label: "Small", value: "space-x-4" },
+                                { label: "Medium", value: "space-x-6" },
+                                { label: "Large", value: "space-x-8" },
+                                { label: "Extra Large", value: "space-x-12" },
+                            ],
+                            defaultValue: "space-x-4",
+                            admin: {
+                                description:
+                                    "Select the space between elements",
+                            },
+                        },
+                        {
+                            name: "items",
+                            type: "array",
+                            maxRows: 6,
+                            fields: [link()],
+                        },
                     ],
                 },
             ],

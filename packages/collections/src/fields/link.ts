@@ -11,13 +11,13 @@ export const appearanceOptions = {
         label: "Secondary Button",
         value: "secondary",
     },
-    default: {
-        label: "Default",
-        value: "default",
+    link: {
+        label: "Link",
+        value: "link",
     },
 };
 
-export type LinkAppearances = "primary" | "secondary" | "default";
+export type LinkAppearances = "primary" | "secondary" | "link";
 
 type LinkType = (options?: {
     appearances?: LinkAppearances[] | false;
@@ -42,28 +42,19 @@ const link: LinkType = ({
                 fields: [
                     {
                         name: "type",
-                        type: "radio",
+                        type: "select",
                         options: [
-                            {
-                                label: "Internal link",
-                                value: "reference",
-                            },
                             {
                                 label: "Custom URL",
                                 value: "custom",
                             },
                             {
-                                label: "Contact Us",
-                                value: "contactus",
-                            },
-                            {
-                                label: "Media Modal",
-                                value: "mediamodal",
+                                label: "Internal link",
+                                value: "reference",
                             },
                         ],
                         defaultValue: "reference",
                         admin: {
-                            layout: "horizontal",
                             width: "50%",
                         },
                     },
@@ -94,15 +85,6 @@ const link: LinkType = ({
             admin: {
                 condition: (_, siblingData) =>
                     siblingData?.type === "reference",
-            },
-        },
-        {
-            name: "media",
-            type: "text",
-            required: true,
-            admin: {
-                condition: (_, siblingData) =>
-                    siblingData?.type === "mediamodal",
             },
         },
         {
@@ -146,9 +128,9 @@ const link: LinkType = ({
 
     if (appearances !== false) {
         let appearanceOptionsToUse = [
-            appearanceOptions.default,
             appearanceOptions.primary,
             appearanceOptions.secondary,
+            appearanceOptions.link,
         ];
 
         if (appearances) {
@@ -158,13 +140,33 @@ const link: LinkType = ({
         }
 
         linkResult.fields.push({
-            name: "appearance",
-            type: "select",
-            defaultValue: "default",
-            options: appearanceOptionsToUse,
-            admin: {
-                description: "Choose how the link should be rendered.",
-            },
+            type: "row",
+            fields: [
+                {
+                    name: "appearance",
+                    type: "select",
+                    defaultValue: "default",
+                    options: appearanceOptionsToUse,
+                    admin: {
+                        description: "Choose how the link should be rendered.",
+                        width: "50%",
+                    },
+                },
+                {
+                    name: "size",
+                    type: "select",
+                    defaultValue: "medium",
+                    options: [
+                        { label: "Small", value: "small" },
+                        { label: "Medium", value: "medium" },
+                        { label: "Large", value: "large" },
+                    ],
+                    admin: {
+                        description: "Choose the size of the link.",
+                        width: "50%",
+                    },
+                },
+            ],
         });
     }
 

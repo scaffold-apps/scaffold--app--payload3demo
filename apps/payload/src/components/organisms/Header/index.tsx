@@ -1,11 +1,16 @@
-import CTA from '@/components/atoms/CTA'
-import { Button } from '@repo/ui/button'
-import Link from 'next/link'
-import { Page } from '../../../../payload-types'
+import { cn } from '@/lib/utils'
+import { Page } from 'payload-types'
+import { CMSLink } from '../CMSLink'
 
 export const Header: React.FC<{ header: Page['header'] }> = ({ header }) => {
   return (
     <header className="container mx-auto p-4 py-8 flex lg:justify-between justify-center items-center text-foreground text-center">
+      <div className="flex flex-row gap-3 font-bold text-lg items-center">
+        {header?.logo && header.logo?.url && header.logo?.alt && (
+          <img className="size-8" src={header.logo.url} alt={header.logo.alt} />
+        )}
+        {header?.companyName && header.companyName}
+      </div>
       {/* <nav className="hidden lg:block">
         <ul className="flex gap-1">
           <li>
@@ -30,19 +35,10 @@ export const Header: React.FC<{ header: Page['header'] }> = ({ header }) => {
           </li>
         </ul>
       </nav> */}
-      <div className="flex flex-row gap-3 lg:translate-x-[-50px] font-bold text-lg items-center">
-        {header?.logo && header.logo?.url && header.logo?.alt && (
-          <img className="size-10" src={header.logo.url} alt={header.logo.alt} />
-        )}
-        {header?.companyName && header.companyName}
-      </div>
-      <div className="hidden lg:block space-x-4">
-        <Button variant={'link'} asChild>
-          <Link href="/login">Login</Link>
-        </Button>
-        <CTA size="sm" asChild={true}>
-          <Link href="#download">Try for free</Link>
-        </CTA>
+      <div className={cn('hidden lg:block', header?.navItems?.spaceBetween || 'space-x-4')}>
+        {header?.navItems?.items?.map(({ link }, index) => {
+          return <CMSLink key={index} {...link} />
+        })}
       </div>
     </header>
   )

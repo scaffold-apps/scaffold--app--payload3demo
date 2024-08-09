@@ -67,40 +67,45 @@ export interface Page {
     showHeader?: boolean | null;
     companyName?: string | null;
     logo?: (string | null) | Media;
-    navItems?:
-      | {
-          link: {
-            type?: ('reference' | 'custom' | 'contactus' | 'mediamodal') | null;
-            newTab?: boolean | null;
-            reference?: {
-              relationTo: 'pages';
-              value: string | Page;
-            } | null;
-            media?: string | null;
-            url?: string | null;
-            label: string;
-          };
-          id?: string | null;
-        }[]
-      | null;
+    navItems?: {
+      spaceBetween?: ('space-x-2' | 'space-x-4' | 'space-x-6' | 'space-x-8' | 'space-x-12') | null;
+      items?:
+        | {
+            link: {
+              type?: ('custom' | 'reference') | null;
+              newTab?: boolean | null;
+              reference?: {
+                relationTo: 'pages';
+                value: string | Page;
+              } | null;
+              url?: string | null;
+              label: string;
+              appearance?: ('primary' | 'secondary' | 'link') | null;
+              size?: ('small' | 'medium' | 'large') | null;
+            };
+            id?: string | null;
+          }[]
+        | null;
+    };
   };
   layout: {
     invertBackground?: boolean | null;
+    logo?: string | Media | null;
     title?: string | null;
     description?: string | null;
     links?:
       | {
           link: {
-            type?: ('reference' | 'custom' | 'contactus' | 'mediamodal') | null;
+            type?: ('custom' | 'reference') | null;
             newTab?: boolean | null;
             reference?: {
               relationTo: 'pages';
               value: string | Page;
             } | null;
-            media?: string | null;
             url?: string | null;
             label: string;
             appearance?: ('primary' | 'secondary') | null;
+            size?: ('small' | 'medium' | 'large') | null;
           };
           id?: string | null;
         }[]
