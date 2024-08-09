@@ -46,11 +46,15 @@ export default buildConfig({
 
   admin: {
     user: adminCollection.slug,
-    autoLogin: {
-      email: 'dev@payloadcms.com',
-      password: 'test',
-      prefillOnly: true,
-    },
+    ...(process.env.NODE_ENV === 'development'
+      ? {
+          autoLogin: {
+            email: 'dev@payloadcms.com',
+            password: process.env.ADMIN_PASSWORD,
+            prefillOnly: true,
+          },
+        }
+      : {}),
   },
 
   globals: [Theme],
