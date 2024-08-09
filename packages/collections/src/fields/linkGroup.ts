@@ -2,12 +2,12 @@ import type { ArrayField, Field } from "payload";
 import deepMerge from "../utilities/deepMerge";
 import link, { LinkAppearances } from "./link";
 
-type LinkGroupType = (options?: {
+interface LinkGroupProps {
     overrides?: Partial<ArrayField>;
     appearances?: LinkAppearances[] | false;
-}) => Field;
+}
 
-const linkGroup: LinkGroupType = ({ overrides = {}, appearances } = {}) => {
+const linkGroup = ({ overrides = {}, appearances }: LinkGroupProps = {}) => {
     const generatedLinkGroup: Field = {
         name: "links",
         type: "array",

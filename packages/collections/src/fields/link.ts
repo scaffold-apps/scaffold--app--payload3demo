@@ -19,17 +19,17 @@ export const appearanceOptions = {
 
 export type LinkAppearances = "primary" | "secondary" | "link";
 
-type LinkType = (options?: {
+interface LinkProps {
     appearances?: LinkAppearances[] | false;
     disableLabel?: boolean;
     overrides?: Record<string, unknown>;
-}) => Field;
+}
 
-const link: LinkType = ({
+const link = ({
     appearances,
     disableLabel = false,
     overrides = {},
-} = {}) => {
+}: LinkProps = {}) => {
     const linkResult: Field = {
         name: "link",
         type: "group",
