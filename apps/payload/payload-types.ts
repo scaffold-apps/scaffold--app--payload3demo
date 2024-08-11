@@ -115,6 +115,41 @@ export interface Page {
     blockName?: string | null;
     blockType: 'heroBlock';
   }[];
+  footer?: {
+    showFooter?: boolean | null;
+    logo?: (string | null) | Media;
+    companyName?: string | null;
+    copyrightLine?: string | null;
+    socialButtons?:
+      | {
+          url: string;
+          icon: string | Media;
+          id?: string | null;
+        }[]
+      | null;
+    footerColumns?:
+      | {
+          columnLinks?:
+            | {
+                link: {
+                  type?: ('custom' | 'reference') | null;
+                  newTab?: boolean | null;
+                  reference?: {
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null;
+                  url?: string | null;
+                  label: string;
+                  appearance?: ('primary' | 'secondary' | 'link') | null;
+                  size?: ('small' | 'medium' | 'large') | null;
+                };
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   slug?: string | null;
   updatedAt: string;
   createdAt: string;

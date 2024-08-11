@@ -1,4 +1,5 @@
 import { CollectionConfig } from "payload";
+import { footerNav } from "./fields/footerNav";
 import { headerNav } from "./fields/headerNav";
 import { layoutField } from "./fields/layout";
 import { slugField } from "./fields/slug";
@@ -41,7 +42,7 @@ export const pagesCollection: CollectionConfig = {
             tabs: [
                 {
                     label: "Main",
-                    fields: [headerNav(), layoutField()],
+                    fields: [headerNav(), layoutField(), footerNav()],
                 },
             ],
         },

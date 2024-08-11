@@ -1,4 +1,5 @@
 import Blocks from '@/components/Blocks'
+import { Footer } from '@/components/organisms/Footer/Footer'
 import { Header } from '@/components/organisms/Header'
 import { setI18n } from '@lingui/react/server'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
@@ -30,6 +31,7 @@ export default async function Page({ params }: { params: { lang: string; slug: s
     <>
       {page?.header?.showHeader && <Header header={page.header} />}
       <Blocks blocks={page.layout} />
+      <Footer footer={page.footer} />
     </>
   )
 }
