@@ -6,7 +6,7 @@ import { en } from 'payload/i18n/en'
 //import { slateEditor } from '@payloadcms/richtext-slate'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { adminCollection } from '@repo/collections/admins'
-import { Theme } from '@repo/collections/globals'
+import { Theme, Website } from '@repo/collections/globals'
 import { mediaCollection } from '@repo/collections/media'
 import { pagesCollection } from '@repo/collections/pages'
 import { buildConfig } from 'payload'
@@ -57,7 +57,7 @@ export default buildConfig({
       : {}),
   },
 
-  globals: [Theme],
+  globals: [Theme, Website],
 
   async onInit(payload) {
     const existingUsers = await payload.find({

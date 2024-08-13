@@ -19,6 +19,7 @@ export interface Config {
   };
   globals: {
     theme: Theme;
+    website: Website;
   };
   locale: null;
   user: Admin & {
@@ -215,6 +216,17 @@ export interface PayloadMigration {
 export interface Theme {
   id: string;
   theme?: ('light' | 'dark') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "website".
+ */
+export interface Website {
+  id: string;
+  name?: string | null;
+  logo?: (string | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }

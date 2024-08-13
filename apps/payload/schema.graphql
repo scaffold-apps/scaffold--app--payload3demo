@@ -19,6 +19,8 @@ type Query {
   docAccessPayloadPreference(id: String!): payload_preferencesDocAccess
   Theme(draft: Boolean): Theme
   docAccessTheme: themeDocAccess
+  Website(draft: Boolean): Website
+  docAccessWebsite: websiteDocAccess
   Access: Access
 }
 
@@ -3455,6 +3457,128 @@ type ThemeUpdateDocAccess {
   where: JSONObject
 }
 
+type Website {
+  name: String
+  logo: Media
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+type websiteDocAccess {
+  fields: WebsiteDocAccessFields
+  read: WebsiteReadDocAccess
+  update: WebsiteUpdateDocAccess
+}
+
+type WebsiteDocAccessFields {
+  name: WebsiteDocAccessFields_name
+  logo: WebsiteDocAccessFields_logo
+  updatedAt: WebsiteDocAccessFields_updatedAt
+  createdAt: WebsiteDocAccessFields_createdAt
+}
+
+type WebsiteDocAccessFields_name {
+  create: WebsiteDocAccessFields_name_Create
+  read: WebsiteDocAccessFields_name_Read
+  update: WebsiteDocAccessFields_name_Update
+  delete: WebsiteDocAccessFields_name_Delete
+}
+
+type WebsiteDocAccessFields_name_Create {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_name_Read {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_name_Update {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_name_Delete {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_logo {
+  create: WebsiteDocAccessFields_logo_Create
+  read: WebsiteDocAccessFields_logo_Read
+  update: WebsiteDocAccessFields_logo_Update
+  delete: WebsiteDocAccessFields_logo_Delete
+}
+
+type WebsiteDocAccessFields_logo_Create {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_logo_Read {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_logo_Update {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_logo_Delete {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_updatedAt {
+  create: WebsiteDocAccessFields_updatedAt_Create
+  read: WebsiteDocAccessFields_updatedAt_Read
+  update: WebsiteDocAccessFields_updatedAt_Update
+  delete: WebsiteDocAccessFields_updatedAt_Delete
+}
+
+type WebsiteDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_createdAt {
+  create: WebsiteDocAccessFields_createdAt_Create
+  read: WebsiteDocAccessFields_createdAt_Read
+  update: WebsiteDocAccessFields_createdAt_Update
+  delete: WebsiteDocAccessFields_createdAt_Delete
+}
+
+type WebsiteDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type WebsiteDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type WebsiteReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type WebsiteUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type Access {
   canAccessAdmin: Boolean!
   admins: adminsAccess
@@ -3462,6 +3586,7 @@ type Access {
   media: mediaAccess
   payload_preferences: payload_preferencesAccess
   theme: themeAccess
+  website: websiteAccess
 }
 
 type adminsAccess {
@@ -5281,6 +5406,121 @@ type ThemeUpdateAccess {
   where: JSONObject
 }
 
+type websiteAccess {
+  fields: WebsiteFields
+  read: WebsiteReadAccess
+  update: WebsiteUpdateAccess
+}
+
+type WebsiteFields {
+  name: WebsiteFields_name
+  logo: WebsiteFields_logo
+  updatedAt: WebsiteFields_updatedAt
+  createdAt: WebsiteFields_createdAt
+}
+
+type WebsiteFields_name {
+  create: WebsiteFields_name_Create
+  read: WebsiteFields_name_Read
+  update: WebsiteFields_name_Update
+  delete: WebsiteFields_name_Delete
+}
+
+type WebsiteFields_name_Create {
+  permission: Boolean!
+}
+
+type WebsiteFields_name_Read {
+  permission: Boolean!
+}
+
+type WebsiteFields_name_Update {
+  permission: Boolean!
+}
+
+type WebsiteFields_name_Delete {
+  permission: Boolean!
+}
+
+type WebsiteFields_logo {
+  create: WebsiteFields_logo_Create
+  read: WebsiteFields_logo_Read
+  update: WebsiteFields_logo_Update
+  delete: WebsiteFields_logo_Delete
+}
+
+type WebsiteFields_logo_Create {
+  permission: Boolean!
+}
+
+type WebsiteFields_logo_Read {
+  permission: Boolean!
+}
+
+type WebsiteFields_logo_Update {
+  permission: Boolean!
+}
+
+type WebsiteFields_logo_Delete {
+  permission: Boolean!
+}
+
+type WebsiteFields_updatedAt {
+  create: WebsiteFields_updatedAt_Create
+  read: WebsiteFields_updatedAt_Read
+  update: WebsiteFields_updatedAt_Update
+  delete: WebsiteFields_updatedAt_Delete
+}
+
+type WebsiteFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type WebsiteFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type WebsiteFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type WebsiteFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type WebsiteFields_createdAt {
+  create: WebsiteFields_createdAt_Create
+  read: WebsiteFields_createdAt_Read
+  update: WebsiteFields_createdAt_Update
+  delete: WebsiteFields_createdAt_Delete
+}
+
+type WebsiteFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type WebsiteFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type WebsiteFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type WebsiteFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type WebsiteReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type WebsiteUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type Mutation {
   createAdmin(data: mutationAdminInput!, draft: Boolean): Admin
   updateAdmin(id: String!, autosave: Boolean, data: mutationAdminUpdateInput!, draft: Boolean): Admin
@@ -5304,6 +5544,7 @@ type Mutation {
   deletePayloadPreference(id: String!): PayloadPreference
   duplicatePayloadPreference(id: String!): PayloadPreference
   updateTheme(data: mutationThemeInput!, draft: Boolean): Theme
+  updateWebsite(data: mutationWebsiteInput!, draft: Boolean): Website
 }
 
 input mutationAdminInput {
@@ -5696,4 +5937,11 @@ input mutationThemeInput {
 enum Theme_theme_MutationInput {
   light
   dark
+}
+
+input mutationWebsiteInput {
+  name: String
+  logo: String
+  updatedAt: String
+  createdAt: String
 }
